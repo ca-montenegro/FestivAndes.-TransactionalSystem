@@ -187,6 +187,7 @@ public class FestivAndesClienteServices {
 			String fechaHoy = dateFormat.format(date);
 			System.out.println(fechaHoy); //2016/11/16 12:08:43
 			notaDebito = tm.inicActualizarDevBoleta(idUsuario, idBoleta, fechaHoy);
+			
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

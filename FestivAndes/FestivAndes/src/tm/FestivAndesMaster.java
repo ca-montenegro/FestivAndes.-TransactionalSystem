@@ -609,6 +609,40 @@ public class FestivAndesMaster {
 		return new ListaInformacionFuncion(informacion);
 
 	}
+	
+	
+	public Boleta inicVenderBoleta(Long idFuncion, Long idSilla, Long idCliente, Long idAbonamiento) throws Exception {
+		
+		Boleta boleta = null;
+		try{
+		
+		this.conn = darConexion();
+		boleta = venderBoleta(idFuncion, idSilla, idCliente, idAbonamiento);
+		conn.commit();
+		}
+		catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return boleta;
+		
+				
+	}
 
 	public Boleta venderBoleta(Long idFuncion, Long idSilla, Long idCliente, Long idAbonamiento) throws Exception {
 		DAOTablaFestival daoFestival = new DAOTablaFestival();
@@ -616,10 +650,10 @@ public class FestivAndesMaster {
 		try 
 		{
 			//////Transacción
-			this.conn = darConexion();
+			//this.conn = darConexion();
 			daoFestival.setConn(conn);
 			boleta = daoFestival.venderBoleta(idFuncion, idSilla, idCliente, idAbonamiento);
-			conn.commit();
+			//conn.commit();
 
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -630,15 +664,15 @@ public class FestivAndesMaster {
 			e.printStackTrace();
 			throw e;
 		} finally {
-			try {
+//			try {
 				daoFestival.cerrarRecursos();
-				if(this.conn!=null)
-					this.conn.close();
-			} catch (SQLException exception) {
-				System.err.println("SQLException closing resources:" + exception.getMessage());
-				exception.printStackTrace();
-				throw exception;
-			}
+//				//if(this.conn!=null)
+//					//this.conn.close();
+//			} catch (SQLException exception) {
+//				System.err.println("SQLException closing resources:" + exception.getMessage());
+//				exception.printStackTrace();
+//				throw exception;
+//			}
 		}
 		return boleta;
 	}
@@ -1039,6 +1073,7 @@ public class FestivAndesMaster {
 		try {
 			this.conn = darConexion();
 			notaDebito = actualizarDevBoleta(idUsuario, idBoleta, fecha);
+			
 			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -1073,6 +1108,7 @@ public class FestivAndesMaster {
 			//this.conn = darConexion();
 			daoFestival.setConn(conn);
 			notaDebito= daoFestival.actualizarDevBoleta(idBoleta, idUsuario, fecha);
+			daoFestival.borrarBoletasDevueltas();
 			//conn.commit();
 
 		} catch (SQLException e) {
@@ -1124,6 +1160,7 @@ public class FestivAndesMaster {
 			for(Long idSillas: daoFestival.verificarSitioLocalidad(abonamiento)){
 				Boleta boleta = venderBoleta(idFunciones.get(i), idSillas, idUsuario, idAbonamiento);
 				boleta.setPrecio((int)(boleta.getPrecio()*0.8));
+				boleta.setIdAbonamiento(idAbonamiento);
 				abonamientoList.add(boleta);
 				i++;
 			}
