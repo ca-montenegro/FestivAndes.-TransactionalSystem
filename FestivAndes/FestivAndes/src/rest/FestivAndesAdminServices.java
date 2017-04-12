@@ -36,6 +36,7 @@ import vos.Rentabilidad;
 import vos.ListaLocalidades;
 import vos.ListaPopulares;
 import vos.ListaRentabilidad;
+import vos.ListaRespuestaAsistencia;
 import vos.ReporteSitio;
 
 import vos.Sitio;
@@ -363,6 +364,23 @@ public class FestivAndesAdminServices {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 		return Response.status(200).entity(masPopuEspectaculo).build();
+	}
+	
+	@GET
+	@Path("/asistenciaCliente/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response reporteAsistenciaCliente(@PathParam("id") Long idCliente)
+	{
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		String idCliente1 = Long.toString(idCliente);
+		ListaRespuestaAsistencia lista;
+		try {
+			lista = tm.generarReporteAsistenciaCliente(idCliente1);
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).entity(lista).build();
 	}
 
 	@PUT

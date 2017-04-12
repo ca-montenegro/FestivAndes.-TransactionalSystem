@@ -659,9 +659,13 @@ public class FestivAndesMaster {
 			daoFestival.setConn(conn);
 			resp = daoFestival.generarReporteAsistenciaCliente(idCliente);
 			activasRealizadas = new ListaPorEstado(resp.get(0));
+			System.out.println("ar" + resp.get(0).isEmpty());
 			activasNoRealizadas = new ListaPorEstado(resp.get(1));
+			System.out.println("anr" + resp.get(1).isEmpty());
 			devueltasRealizadas = new ListaPorEstado(resp.get(2));
+			System.out.println("dr" + resp.get(2).isEmpty());
 			devueltasNoRealizadas = new ListaPorEstado(resp.get(3));
+			System.out.println("dnr" + resp.get(3).isEmpty());
 			realizadas = new ListaPorRealizacion(activasRealizadas, devueltasRealizadas);
 			noRealizadas = new ListaPorRealizacion(activasNoRealizadas, devueltasNoRealizadas);
 			conn.commit();

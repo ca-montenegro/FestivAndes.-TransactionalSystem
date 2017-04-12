@@ -638,7 +638,7 @@ public class DAOTablaFestival {
 			char[] cha = rs.getString("ESTADO").toCharArray();
 			char estado = cha[0];
 			System.out.println(estado);
-			char[] cha2 = rs.getString("ESTADO").toCharArray();
+			char[] cha2 = rs.getString("REALIZADA").toCharArray();
 			char realizada = cha2[0];
 			System.out.println(realizada);
 			Long idSitio = Long.parseLong(rs.getString("ID_SITIO"));
@@ -653,6 +653,7 @@ public class DAOTablaFestival {
 			System.out.println(frc == null);
 			if(estado == 'A' && realizada == 'N')
 				activasNoRealizadas.add(frc);
+				
 			else if(estado == 'A' && realizada == 'S')
 				activasRealizadas.add(frc);
 			else if(estado == 'D' && realizada == 'N')
@@ -660,6 +661,11 @@ public class DAOTablaFestival {
 			else if(estado == 'D' && realizada == 'S')
 				devueltasRealizadas.add(frc);
 		}
+		
+		System.out.println("EN DAO " +activasRealizadas.isEmpty() );
+		System.out.println("EN DAO " +activasNoRealizadas.isEmpty() );
+		System.out.println("EN DAO " +devueltasRealizadas.isEmpty() );
+		System.out.println("EN DAO " +devueltasNoRealizadas.isEmpty());
 		
 		resp.add(activasRealizadas);
 		resp.add(activasNoRealizadas);
