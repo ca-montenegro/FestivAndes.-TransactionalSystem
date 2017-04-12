@@ -179,6 +179,7 @@ public class FestivAndesClienteServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response informeAsistencia(@PathParam("id") Long idCliente)
 	{
+		System.out.println(idCliente);
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
 		String idCliente1 = Long.toString(idCliente);
 		ListaRespuestaAsistencia lista;
@@ -191,10 +192,11 @@ public class FestivAndesClienteServices {
 	}
 	
 	@GET
-	@Path("/reporteCompania/{id}")
+	@Path("/reporteCompania/{idC}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response darReporteCompania(@PathParam("id")Long idCliente, @javax.ws.rs.PathParam("id") Long idCompania)
+	public Response darReporteCompania(@PathParam("id")Long idCliente, @javax.ws.rs.PathParam("idC") Long idCompania)
 	{
+		System.out.println(idCliente);
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
 		String idCompania1 = Long.toString(idCompania);
 		String idCliente1 = Long.toString(idCliente);
