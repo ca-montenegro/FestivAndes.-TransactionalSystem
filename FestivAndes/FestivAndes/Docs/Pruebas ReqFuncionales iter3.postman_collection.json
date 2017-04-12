@@ -1,0 +1,111 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Pruebas ReqFuncionales iter3",
+		"_postman_id": "bec0cadb-f63a-8ad1-bfce-d3920d5061c9",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/FestivAndes/rest/cliente/19/boleta/multiples",
+			"request": {
+				"url": "http://localhost:8080/FestivAndes/rest/cliente/19/boleta/multiples",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"idFuncion\":2,\n  \"idSilla\":35,\n  \"cantidad\":6,\n  \"estado\":\"A\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/FestivAndes/rest/cliente/20/abonar",
+			"request": {
+				"url": "http://localhost:8080/FestivAndes/rest/cliente/20/abonar",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idsFunciones\":[\n\t\t1,\n\t\t2,\n\t\t3],\n\t\"idsLocalidades\":[\n\t\t\t\"VIP\",\n\t\t\t\"GENERAL\",\n\t\t\t\"PALCO\"],\n\t\t\t\"fechaConsulta\":\"7/12/2016\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/FestivAndes/rest/cliente/19/boleta/206/devolucion",
+			"request": {
+				"url": "http://localhost:8080/FestivAndes/rest/cliente/19/boleta/206/devolucion",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/FestivAndes/rest/cliente/20/abonar/100009/devolucion",
+			"request": {
+				"url": "http://localhost:8080/FestivAndes/rest/cliente/20/abonar/100009/devolucion",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\t\t\t\"fechaConsulta\":\"8/12/2016\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/FestivAndes/rest/administrador/cancelarFuncion/1",
+			"request": {
+				"url": "http://localhost:8080/FestivAndes/rest/administrador/cancelarFuncion/1",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\t\t\t\"fechaConsulta\":\"8/12/2016\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

@@ -852,7 +852,7 @@ public class DAOTablaFestival {
 		System.out.println("SQL stmt: "+ sql);
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		prepStmt.executeUpdate();
-		String sql1 = "insert into devolucion values((devolucion_seq2.nextval), "  + idBoleta + ")";
+		String sql1 = "insert into devolucion values((devolucion_seq2.nextval), "  + idBoleta + "," + idUsuario +")";
 		String key[] = {"ID_DEVOLUCION"};
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql1,key);
 		recursos.add(prepStmt2);
@@ -971,6 +971,17 @@ public class DAOTablaFestival {
 			idsBoletas.add(idBoleta + ","+idCliente);	
 		}
 		return idsBoletas;
+	}
+
+	public void cancelarFuncion(Long idFuncion) throws SQLException {
+		
+		String sql = "delete from funcion where id_funcion = " + idFuncion;
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		if(!rs.next())
+			throw new SQLException("No se pudo eliminar la funcion con id: " + idFuncion);
+		
 	}
 
 }

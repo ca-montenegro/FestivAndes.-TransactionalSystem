@@ -1290,6 +1290,7 @@ public class FestivAndesMaster {
 				notasDebito.add(actualizarDevBoleta(idUsuario, idBoleta, fecha));
 
 			}
+			daoFestival.cancelarFuncion(idFuncion);
 			conn.setAutoCommit(true);
 			conn.commit();
 		} catch (SQLException e) {
