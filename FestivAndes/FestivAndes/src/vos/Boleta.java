@@ -1,8 +1,8 @@
 package vos;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
+//import javax.persistence.Id;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -12,8 +12,8 @@ public class Boleta {
 	 * Identificacion de la boleta
 	 */
 	@JsonProperty(value="id")
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@JsonProperty(value="idFuncion")

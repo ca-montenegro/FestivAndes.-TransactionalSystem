@@ -9,8 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Queue;
 
-import org.jboss.resteasy.util.DateUtil;
-
 import sun.security.jca.GetInstance;
 import vos.Abonamiento;
 import vos.Boleta;
@@ -18,6 +16,7 @@ import vos.Cliente;
 import vos.Compania;
 import vos.Espectaculo;
 import vos.Funcion;
+import vos.FuncionRespuestaCliente;
 import vos.InformacionFuncionSitio;
 import vos.InformacionVentaFuncion;
 import vos.InformacionVentaLocalidad;
@@ -610,6 +609,60 @@ public class DAOTablaFestival {
 		}
 
 		return lista;
+	}
+	
+	public ArrayList<ArrayList<FuncionRespuestaCliente>> generarReporteAsistenciaCliente(String idCliente) throws SQLException
+	{
+		ArrayList<ArrayList<FuncionRespuestaCliente>> resp = new ArrayList<ArrayList<FuncionRespuestaCliente>>();
+		ArrayList<FuncionRespuestaCliente> activasRealizadas = new ArrayList<FuncionRespuestaCliente>();
+		ArrayList<FuncionRespuestaCliente> devueltasRealizadas = new ArrayList<FuncionRespuestaCliente>();
+		ArrayList<FuncionRespuestaCliente> activasNoRealizadas = new ArrayList<FuncionRespuestaCliente>();
+		ArrayList<FuncionRespuestaCliente> devueltasNoRealizadas = new ArrayList<FuncionRespuestaCliente>();
+		String sql = "WITH TABLA1 AS (SELECT ID_FUNCION, ESTADO, ID_CLIENTE, COUNT(*) AS CANT_FUNCION " +
+				"FROM ISIS2304A241720.BOLETA WHERE ID_CLIENTE = " +  idCliente + " GROUP BY ID_FUNCION, ID_CLIENTE, ESTADO) "+
+				"SELECT ID_FUNCION, ESTADO, ID_CLIENTE, REALIZADA, FECHA, ID_SITIO, ID_ESPECTACULO "+
+				"FROM TABLA1 NATURAL JOIN(SELECT ID_FUNCION AS ID_FUNCION, REALIZADA AS REALIZADA, "+
+				"FECHA AS FECHA, ID_SITIO AS ID_SITIO, ID_ESPECTACULO AS ID_ESPECTACULO "+
+				"FROM ISIS2304A241720.FUNCION) ";
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idFuncion = Long.parseLong(rs.getString("ID_FUNCION"));
+			System.out.println(idFuncion);
+			char[] cha = rs.getString("ESTADO").toCharArray();
+			char estado = cha[0];
+			System.out.println(estado);
+			char[] cha2 = rs.getString("ESTADO").toCharArray();
+			char realizada = cha2[0];
+			System.out.println(realizada);
+			Long idSitio = Long.parseLong(rs.getString("ID_SITIO"));
+			System.out.println(idSitio);
+			Long idEspectaculo = Long.parseLong(rs.getString("ID_ESPECTACULO"));
+			System.out.println(idEspectaculo);
+			String fecha = rs.getString("FECHA");
+			System.out.println(fecha);
+			
+			FuncionRespuestaCliente frc = new FuncionRespuestaCliente(idFuncion, fecha, idSitio, idEspectaculo);
+			
+			System.out.println(frc == null);
+			if(estado == 'A' && realizada == 'N')
+				activasNoRealizadas.add(frc);
+			else if(estado == 'A' && realizada == 'S')
+				activasRealizadas.add(frc);
+			else if(estado == 'D' && realizada == 'N')
+				devueltasNoRealizadas.add(frc);
+			else if(estado == 'D' && realizada == 'S')
+				devueltasRealizadas.add(frc);
+		}
+		
+		resp.add(activasRealizadas);
+		resp.add(activasNoRealizadas);
+		resp.add(devueltasRealizadas);
+		resp.add(devueltasNoRealizadas);
+		
+		return resp;
 	}
 
 	public ArrayList<InformacionVentaFuncion> generarReporteDeUnEspectaculo(String idEspectaculo) throws SQLException

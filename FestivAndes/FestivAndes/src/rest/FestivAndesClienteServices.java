@@ -9,6 +9,7 @@ import java.util.Date;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -24,6 +25,8 @@ import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import tm.FestivAndesMaster;
 import vos.Abonamiento;
 import vos.Boleta;
+import vos.ListaInformacion;
+import vos.ListaRespuestaAsistencia;
 import vos.NotaDebito;
 import vos.Preferencia;
 import vos.Usuario;
@@ -166,7 +169,27 @@ public class FestivAndesClienteServices {
 		}
 		return  Response.status(200).entity(vendidas).build();
 	}
-
+	
+	/**Metodo que expone servicio REST usando GET que informa la asistencia del cliente a las funciones
+	 * 
+	 */
+	@GET
+	@Path("/asistencia")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response informeAsistencia(@PathParam("id") Long idCliente)
+	{
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		String idCliente1 = Long.toString(idCliente);
+		ListaRespuestaAsistencia lista;
+		try {
+			lista = tm.generarReporteAsistenciaCliente(idCliente1);
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).entity(lista).build();
+	}
+	
 	/**
 	 * Método que expone servicio REST usando PUT que agrega varias boletas a un cliente
 	 * <b>URL: </b> http://"ip o nombre de host":8080/FestivAndes/rest/administrado/cliente/id/...
