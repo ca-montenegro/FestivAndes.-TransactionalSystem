@@ -18,6 +18,7 @@ import vos.Espectaculo;
 import vos.InformacionVentaFuncion;
 import vos.InformacionVentaLocalidad;
 import vos.ListaFuncioneSitio;
+import vos.ListaFuncionesCompania;
 import vos.ListaInformacion;
 import vos.ListaInformacionFuncion;
 import vos.ListaLocalidades;
@@ -28,6 +29,7 @@ import vos.Localidad;
 import vos.MasPopuEspectaculo;
 import vos.NotaDebito;
 import vos.Funcion;
+import vos.FuncionCompania;
 import vos.FuncionRespuestaCliente;
 import vos.InformacionFuncionSitio;
 import vos.Preferencia;
@@ -568,6 +570,41 @@ public class FestivAndesMaster {
 		}
 		return new ListaInformacion(informacion);
 	}
+	
+	public ListaFuncionesCompania generarReporteDeUnaCompania (String idCompania) throws SQLException
+	{
+		ArrayList<FuncionCompania> funciones;
+		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			daoFestival.setConn(conn);
+			funciones = daoFestival.darReporteCompania(idCompania);
+			conn.commit();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoFestival.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return new ListaFuncionesCompania(Long.parseLong(idCompania), funciones);
+	}
+	
 	
 	public ListaRespuestaAsistencia generarReporteAsistenciaCliente(String idCliente) throws SQLException
 	{

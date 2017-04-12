@@ -157,7 +157,6 @@ public class FestivAndesClienteServices {
 			//while(bole.getCantidad()>0);
 			try{
 				vendidas  = tm.venderMultiplesBoleta(bole.getIdFuncion(), bole.getIdSilla(), id, bole.getCantidad());
-
 			}
 			catch(Exception e)
 			{

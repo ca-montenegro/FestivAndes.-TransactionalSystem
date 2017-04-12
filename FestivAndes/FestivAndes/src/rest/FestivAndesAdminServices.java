@@ -26,6 +26,7 @@ import vos.Espectaculo;
 import vos.Funcion;
 import vos.InformacionVentaLocalidad;
 import vos.ListaFuncioneSitio;
+import vos.ListaFuncionesCompania;
 import vos.ListaInformacion;
 import vos.ListaInformacionFuncion;
 
@@ -131,6 +132,22 @@ public class FestivAndesAdminServices {
 		ListaInformacion lista;
 		try {
 			lista = tm.generarReporteDeUnaFuncion(idFuncion1);
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).entity(lista).build();
+	}
+	
+	@GET
+	@Path("/reporteCompania/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response darReporteCompania(@PathParam("id") Long idCompania)
+	{
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		String idCompania1 = Long.toString(idCompania);
+		ListaFuncionesCompania lista;
+		try {
+			lista = tm.generarReporteDeUnaCompania(idCompania1);
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

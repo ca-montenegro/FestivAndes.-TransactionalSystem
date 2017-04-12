@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Queue;
 
+import com.sun.javafx.collections.ArrayListenerHelper;
+
 import sun.security.jca.GetInstance;
 import vos.Abonamiento;
 import vos.Boleta;
@@ -16,6 +18,7 @@ import vos.Cliente;
 import vos.Compania;
 import vos.Espectaculo;
 import vos.Funcion;
+import vos.FuncionCompania;
 import vos.FuncionRespuestaCliente;
 import vos.InformacionFuncionSitio;
 import vos.InformacionVentaFuncion;
@@ -624,6 +627,7 @@ public class DAOTablaFestival {
 				"FROM TABLA1 NATURAL JOIN(SELECT ID_FUNCION AS ID_FUNCION, REALIZADA AS REALIZADA, "+
 				"FECHA AS FECHA, ID_SITIO AS ID_SITIO, ID_ESPECTACULO AS ID_ESPECTACULO "+
 				"FROM ISIS2304A241720.FUNCION) ";
+		System.out.println(sql);
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
@@ -708,6 +712,51 @@ public class DAOTablaFestival {
 		return lista;
 	}
 
+	public ArrayList darReporteCompania(String idCompania) throws SQLException
+	{
+		ArrayList<FuncionCompania> funciones = new ArrayList<>();
+		
+		String sql = "WITH TABLA1 AS (SELECT ID_ESPEC, NOMBRE, ID_COMPANIA FROM "+
+				"ISIS2304A241720.ESPECTACULO WHERE ID_COMPANIA = 19), "+ 
+				"TABLA2 AS( "+
+				"SELECT ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO "+
+				"FROM TABLA1 NATURAL JOIN (SELECT ID_FUNCION, ID_ESPECTACULO AS ID_ESPEC, ID_SITIO AS ID_SITIO FROM ISIS2304A241720.FUNCION)), "+
+				"TABLA3 AS( "+
+				"SELECT ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO, ID_SILLA "+
+				"FROM TABLA2 NATURAL JOIN "+
+				"(SELECT ID_FUNCION AS ID_FUNCION, ID_SILLA FROM ISIS2304A241720.BOLETA)), "+
+				"TABLA4 AS(SELECT ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO, ID_LOCALIDAD  "+
+				"FROM TABLA3 NATURAL JOIN (SELECT ID_SILLA AS ID_SILLA, ID_LOCALIDAD AS ID_LOCALIDAD FROM ISIS2304A241720.SILLAS)), "+
+				"TABLA5 AS(SELECT ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO, COUNT(*) AS CANT_BOLETAS, PRECIO "+
+				"FROM TABLA4 NATURAL JOIN(SELECT ID_LOCALIDAD AS ID_LOCALIDAD, PRECIO "+
+				"FROM ISIS2304A241720.LOCALIDAD) GROUP BY ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO, PRECIO), "+
+				"TABLA6 AS(SELECT ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO, CANT_BOLETAS, SUM(CANT_BOLETAS*PRECIO) AS RECOGIDO "+
+				"FROM TABLA5 GROUP BY ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO, CANT_BOLETAS), "+
+				"TABLA7 AS(SELECT ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO, SUM(CANT_BOLETAS) AS CANT_BOL_TOTAL, SUM(RECOGIDO) AS PRODUCIDO "+
+				"FROM TABLA6 GROUP BY  ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO) "+
+				"SELECT ID_FUNCION, ID_ESPEC, NOMBRE, ID_COMPANIA, ID_SITIO, CANT_BOL_TOTAL, PRODUCIDO, (CANT_BOL_TOTAL/CAPACIDAD)*100 AS PORCENTAJE "+
+				"FROM TABLA7 NATURAL JOIN(SELECT ID_SITIO AS ID_SITIO, CAPACIDAD FROM ISIS2304A241720.SITIO)";
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idFuncion = Long.parseLong(rs.getString("ID_FUNCION"));
+			Long idEspectaculo = Long.parseLong(rs.getString("ID_ESPEC"));
+			String nombreEspectaculo = rs.getString("NOMBRE");
+			Long idSitio = Long.parseLong(rs.getString("ID_SITIO"));
+			int cantBoletas = Integer.parseInt(rs.getString("CANT_BOL_TOTAL"));
+			int producido = Integer.parseInt(rs.getString("PRODUCIDO"));
+			double porcentaje = Double.parseDouble(rs.getString("PORCENTAJE"));
+			
+			FuncionCompania fc = new FuncionCompania(idFuncion, idSitio, producido, porcentaje, cantBoletas);
+			
+			funciones.add(fc);
+		}
+		
+		return funciones;
+	}
+	
 	public Sitio darSitioConsulta (String idSitio) throws SQLException
 	{
 		String sql = "SELECT * FROM ISIS2304A241720.SITIO WHERE ID_SITIO =" + idSitio;
@@ -1036,6 +1085,8 @@ public class DAOTablaFestival {
 			throw new SQLException("No se pudo eliminar la funcion con id: " + idFuncion);
 		
 	}
+	
+
 
 }
 
