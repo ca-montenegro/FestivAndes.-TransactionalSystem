@@ -25,6 +25,7 @@ import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import tm.FestivAndesMaster;
 import vos.Abonamiento;
 import vos.Boleta;
+import vos.ListaFuncionesCompania;
 import vos.ListaInformacion;
 import vos.ListaRespuestaAsistencia;
 import vos.NotaDebito;
@@ -183,6 +184,23 @@ public class FestivAndesClienteServices {
 		ListaRespuestaAsistencia lista;
 		try {
 			lista = tm.generarReporteAsistenciaCliente(idCliente1);
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).entity(lista).build();
+	}
+	
+	@GET
+	@Path("/reporteCompania/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response darReporteCompania(@PathParam("id")Long idCliente, @javax.ws.rs.PathParam("id") Long idCompania)
+	{
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		String idCompania1 = Long.toString(idCompania);
+		String idCliente1 = Long.toString(idCliente);
+		ListaFuncionesCompania lista;
+		try {
+			lista = tm.generarReporteDeUnaCompaniaParaCliente(idCompania1, idCliente1);
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

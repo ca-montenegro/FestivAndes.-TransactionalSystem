@@ -605,6 +605,40 @@ public class FestivAndesMaster {
 		return new ListaFuncionesCompania(Long.parseLong(idCompania), funciones);
 	}
 	
+	public ListaFuncionesCompania generarReporteDeUnaCompaniaParaCliente (String idCompania, String idCliente) throws SQLException
+	{
+		ArrayList<FuncionCompania> funciones;
+		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			daoFestival.setConn(conn);
+			funciones = daoFestival.darReporteCompaniaParaCliente(idCompania,idCliente);
+			conn.commit();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoFestival.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return new ListaFuncionesCompania(Long.parseLong(idCompania), funciones);
+	}
+	
 	
 	public ListaRespuestaAsistencia generarReporteAsistenciaCliente(String idCliente) throws SQLException
 	{

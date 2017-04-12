@@ -141,7 +141,7 @@ public class FestivAndesAdminServices {
 	@GET
 	@Path("/reporteCompania/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response darReporteCompania(@PathParam("id") Long idCompania)
+	public Response darReporteCompania(@javax.ws.rs.PathParam("id") Long idCompania)
 	{
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
 		String idCompania1 = Long.toString(idCompania);
