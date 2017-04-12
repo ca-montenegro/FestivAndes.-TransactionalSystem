@@ -852,7 +852,7 @@ public class DAOTablaFestival {
 		System.out.println("SQL stmt: "+ sql);
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		prepStmt.executeUpdate();
-		String sql1 = "insert into devolucion values((devolucion_seq2.nextval - 1 +  " + idBoleta  + ") , " + idBoleta + ")";
+		String sql1 = "insert into devolucion values((devolucion_seq2.nextval), "  + idBoleta + ")";
 		String key[] = {"ID_DEVOLUCION"};
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql1,key);
 		recursos.add(prepStmt2);
@@ -954,6 +954,23 @@ public class DAOTablaFestival {
 		if(!prepStmt.executeQuery().next())
 			throw new SQLException("No se pudieron eliminar las boletas");
 		
+	}
+	
+	public ArrayList<String> obtenerIdBoletaFunCancelada(Long idFuncion) throws SQLException
+	{
+		ArrayList<String> idsBoletas = new ArrayList<>();
+		
+		String sql = "select * from boleta where id_funcion = " + idFuncion + " order by id_boleta";
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idBoleta = Long.parseLong(rs.getString("ID_BOLETA"));
+			Long idCliente = Long.parseLong(rs.getString("ID_CLIENTE"));
+			idsBoletas.add(idBoleta + ","+idCliente);	
+		}
+		return idsBoletas;
 	}
 
 }

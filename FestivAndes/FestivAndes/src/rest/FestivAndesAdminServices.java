@@ -1,6 +1,8 @@
 package rest;
 
 
+import java.util.ArrayList;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -8,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -17,6 +20,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import tm.FestivAndesMaster;
+import vos.Abonamiento;
 import vos.Compania;
 import vos.Espectaculo;
 import vos.Funcion;
@@ -26,6 +30,7 @@ import vos.ListaInformacion;
 import vos.ListaInformacionFuncion;
 
 import vos.Localidad;
+import vos.NotaDebito;
 import vos.Rentabilidad;
 import vos.ListaLocalidades;
 import vos.ListaPopulares;
@@ -343,65 +348,22 @@ public class FestivAndesAdminServices {
 		return Response.status(200).entity(masPopuEspectaculo).build();
 	}
 
-	/**
-	 * Método que expone servicio REST usando PUT que agrega los videos que recibe en Json
-	 * <b>URL: </b> http://"ip o nombre de host":8080/VideoAndes/rest/videos/videos
-	 * @param videos - videos a agregar. 
-	 * @return Json con el video que agrego o Json con el error que se produjo
-	 */
-	//	@PUT
-	//	@Path("/videos")
-	//	@Consumes(MediaType.APPLICATION_JSON)
-	//	@Produces(MediaType.APPLICATION_JSON)
-	//	public Response addVideo(ListaVideos videos) {
-	//		VideoAndesMaster tm = new VideoAndesMaster(getPath());
-	//		try {
-	//			tm.addVideos(videos);
-	//		} catch (Exception e) {
-	//			return Response.status(500).entity(doErrorMessage(e)).build();
-	//		}
-	//		return Response.status(200).entity(videos).build();
-	//	}
-
-	/**
-	 * Método que expone servicio REST usando POST que actualiza el video que recibe en Json
-	 * <b>URL: </b> http://"ip o nombre de host":8080/VideoAndes/rest/videos/video
-	 * @param video - video a actualizar. 
-	 * @return Json con el video que actualizo o Json con el error que se produjo
-	 */
-	//	@POST
-	//	@Path("/video")
-	//	@Consumes(MediaType.APPLICATION_JSON)
-	//	@Produces(MediaType.APPLICATION_JSON)
-	//	public Response updateVideo(Video video) {
-	//		VideoAndesMaster tm = new VideoAndesMaster(getPath());
-	//		try {
-	//			tm.updateVideo(video);
-	//		} catch (Exception e) {
-	//			return Response.status(500).entity(doErrorMessage(e)).build();
-	//		}
-	//		return Response.status(200).entity(video).build();
-	//	}
-
-	/**
-	 * Método que expone servicio REST usando DELETE que actualiza el video que recibe en Json
-	 * <b>URL: </b> http://"ip o nombre de host":8080/VideoAndes/rest/videos/video
-	 * @param video - video a aliminar. 
-	 * @return Json con el video que elimino o Json con el error que se produjo
-	 */
-	//	@DELETE
-	//	@Path("/video")
-	//	@Consumes(MediaType.APPLICATION_JSON)
-	//	@Produces(MediaType.APPLICATION_JSON)
-	//	public Response deleteVideo(Video video) {
-	//		VideoAndesMaster tm = new VideoAndesMaster(getPath());
-	//		try {
-	//			tm.deleteVideo(video);
-	//		} catch (Exception e) {
-	//			return Response.status(500).entity(doErrorMessage(e)).build();
-	//		}
-	//		return Response.status(200).entity(video).build();
-	//	}
-
+	@PUT
+	@Path("/cancelarFuncion/{idFuncion}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response devolerAbonamiento(@PathParam("idFuncion") Long idFuncion, Abonamiento abonamiento)
+	{
+		ArrayList<NotaDebito> notasDebito = null;
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		try{
+		notasDebito = (tm.devolverBoletasFunCancel(idFuncion, abonamiento.getFechaConsulta()));
+		}
+		catch(Exception e)
+		{
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).type("text/plain").entity(notasDebito.toString()).build();
+	}
 
 }

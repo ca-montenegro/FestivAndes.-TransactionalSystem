@@ -698,7 +698,7 @@ public class FestivAndesMaster {
 			cont++;
 
 		} catch (SQLException e) {
-			conn.rollback();
+			//conn.rollback();
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();
 			throw e;
@@ -727,6 +727,7 @@ public class FestivAndesMaster {
 			//////Transacción
 
 			this.conn = darConexion();
+			conn.setAutoCommit(false);
 			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			daoFestival.setConn(conn);
 			conn.setSavepoint();
@@ -735,6 +736,7 @@ public class FestivAndesMaster {
 
 			}
 			conn.commit();
+			conn.setAutoCommit(true);
 
 		} catch (SQLException e) {
 			conn.rollback();
@@ -1108,6 +1110,7 @@ public class FestivAndesMaster {
 			//this.conn = darConexion();
 			daoFestival.setConn(conn);
 			notaDebito= daoFestival.actualizarDevBoleta(idBoleta, idUsuario, fecha);
+			conn.commit();
 			daoFestival.borrarBoletasDevueltas();
 			//conn.commit();
 
@@ -1224,7 +1227,6 @@ public class FestivAndesMaster {
 				notasDebito.add(actualizarDevBoleta(idUsuario, idBoleta, fecha));
 
 			}
-			daoFestival.borrarBoletasDevueltas();
 			conn.setAutoCommit(true);
 			conn.commit();
 		} catch (SQLException e) {
@@ -1268,6 +1270,68 @@ public class FestivAndesMaster {
 		return notasDebito;
 	}
 
+	
+	public ArrayList<NotaDebito> devolverBoletasFunCancel(Long idFuncion, String fecha) {
+		// TODO Auto-generated method stub
+		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		ArrayList<String> idsBoletas;
+		ArrayList<NotaDebito> notasDebito = new ArrayList<>();
+		try {
+			this.conn = darConexion();
+			conn.setAutoCommit(false);
+			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			daoFestival.setConn(conn);
+			conn.setSavepoint();
+			idsBoletas = daoFestival.obtenerIdBoletaFunCancelada(idFuncion);
+			for(String idBoletaCliente: idsBoletas)
+			{
+				Long idBoleta = Long.parseLong(idBoletaCliente.split(",")[0]);
+				Long idUsuario = Long.parseLong(idBoletaCliente.split(",")[1]);
+				notasDebito.add(actualizarDevBoleta(idUsuario, idBoleta, fecha));
+
+			}
+			conn.setAutoCommit(true);
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			try {
+				conn.rollback();
+				throw e;
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			try {
+				throw e;
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+				daoFestival.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				try {
+					throw exception;
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return notasDebito;
+	}
 
 
 
