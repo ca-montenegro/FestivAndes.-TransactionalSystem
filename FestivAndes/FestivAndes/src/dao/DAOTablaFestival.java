@@ -258,6 +258,30 @@ public class DAOTablaFestival {
 		}
 		return st;
 	}
+	
+	public Compania buscarCompania(Long id) throws SQLException
+	{
+		String sql = "SELECT * FROM ISIS2304A241720.COMPANIA WHERE ID_COMPA = " + id;
+		System.out.println("SQL stmt:" + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		Compania st = null;
+		if(rs.next())
+		{
+			Long idComp = Long.parseLong(rs.getString("ID_COMPA"));
+			String nombre = rs.getString("NOMBRE_COMPA");
+			String repre = rs.getString("REPRESEN_COMPA");
+			String pais = rs.getString("PAIS_ORIGEN_COMPA");
+			String pagWeb = rs.getString("PAG_WEB_COMPA");
+			String llegada = rs.getString("FECHA_LLEGADA_COMPA");
+			String salida = rs.getString("FECHA_SALIDA_COMPA");
+			Long idFest = Long.parseLong(rs.getString("ID_FESTIVAL"));
+			Long idOrga = Long.parseLong(rs.getString("ID_ORGANI"));
+			st = new Compania(idComp, nombre, repre, pais, pagWeb, llegada, salida, idFest, idOrga);
+		}
+		return st;
+	}
 
 	public Espectaculo buscarEspectaculo(Long id) throws SQLException
 	{
@@ -616,6 +640,11 @@ public class DAOTablaFestival {
 	
 	public ArrayList<ArrayList<FuncionRespuestaCliente>> generarReporteAsistenciaCliente(String idCliente) throws SQLException
 	{
+		Long idclientex = Long.parseLong(idCliente);
+		if(darCliente(idclientex) == null)
+		{
+			throw new SQLException("El cliente con el id " + idCliente + " no esta registrado en el sistema");
+		}
 		ArrayList<ArrayList<FuncionRespuestaCliente>> resp = new ArrayList<ArrayList<FuncionRespuestaCliente>>();
 		ArrayList<FuncionRespuestaCliente> activasRealizadas = new ArrayList<FuncionRespuestaCliente>();
 		ArrayList<FuncionRespuestaCliente> devueltasRealizadas = new ArrayList<FuncionRespuestaCliente>();
@@ -662,10 +691,11 @@ public class DAOTablaFestival {
 				devueltasRealizadas.add(frc);
 		}
 		
-		System.out.println("EN DAO " +activasRealizadas.isEmpty() );
-		System.out.println("EN DAO " +activasNoRealizadas.isEmpty() );
-		System.out.println("EN DAO " +devueltasRealizadas.isEmpty() );
-		System.out.println("EN DAO " +devueltasNoRealizadas.isEmpty());
+		if(activasRealizadas.isEmpty() && activasNoRealizadas.isEmpty() 
+				&& devueltasNoRealizadas.isEmpty() && devueltasRealizadas.isEmpty())
+		{
+			throw new SQLException("El cliente no asiste aun a ninguna funcion");
+		}
 		
 		resp.add(activasRealizadas);
 		resp.add(activasNoRealizadas);
@@ -720,7 +750,10 @@ public class DAOTablaFestival {
 
 	public ArrayList darReporteCompania(String idCompania) throws SQLException
 	{
-		ArrayList<FuncionCompania> funciones = new ArrayList<>();
+		ArrayList<FuncionCompania> funciones = new ArrayList<>();	
+		
+		if(buscarCompania(Long.parseLong(idCompania)) == null)
+			throw new SQLException("La compania con id " + idCompania + " no existe");
 		
 		String sql = "WITH TABLA1 AS (SELECT ID_ESPEC, NOMBRE, ID_COMPANIA FROM "+
 				"ISIS2304A241720.ESPECTACULO WHERE ID_COMPANIA = "+ idCompania +"), "+ 
@@ -767,6 +800,9 @@ public class DAOTablaFestival {
 	public ArrayList darReporteCompaniaParaCliente(String idCompania, String idCliente) throws SQLException
 	{
 		ArrayList<FuncionCompania> funciones = new ArrayList<>();
+		
+		if(buscarCompania(Long.parseLong(idCompania)) == null)
+			throw new SQLException("La compania con id " + idCompania + " no existe");
 		
 		String sql = "WITH TABLA0 AS (SELECT ID_FUNCION FROM ISIS2304A241720.BOLETA WHERE ID_CLIENTE = "+idCliente+"), "+
 						"TABLA1 AS (SELECT ID_ESPEC, NOMBRE, ID_COMPANIA FROM "+
