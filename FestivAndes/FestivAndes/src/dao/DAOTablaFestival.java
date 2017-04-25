@@ -34,6 +34,7 @@ import vos.Usuario;
 
 public class DAOTablaFestival {
 
+
 	/**
 	 * Arraylits de recursos que se usan para la ejecución de sentencias SQL
 	 */
@@ -73,527 +74,6 @@ public class DAOTablaFestival {
 	 */
 	public void setConn(Connection con){
 		this.conn = con;
-	}
-
-	public ArrayList<Usuario> darUsuarios() throws SQLException{
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-
-		String sql = "SELECT * FROM ISIS2304A241720.USUARIO";
-
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-
-		while (rs.next()) {
-			Long id = Long.parseLong(rs.getString("ID_USER"));
-			String nombre = (rs.getString("NOMBRE_USER"));
-			String correo = rs.getString("CORREO_USER");
-			Long rol = Long.parseLong(rs.getString("ROL_USER"));
-			usuarios.add(new Usuario(id, nombre, correo, rol));
-
-		}
-		return usuarios;
-	}
-
-	public Usuario darUsuario(Long id) throws SQLException{
-		Usuario user = null;
-		String sql = "SELECT * FROM USUARIO WHERE ID_USER = " + id;
-		System.out.println("SQL stmt:" + sql);
-
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		while(rs.next())
-		{
-			Long id1 = Long.parseLong(rs.getString("ID_USER"));
-			String nombre = (rs.getString("NOMBRE_USER"));
-			String correo = rs.getString("CORREO_USER");
-			Long rol = Long.parseLong(rs.getString("ROL_USER"));
-			user = new Usuario(id1, nombre, correo, rol);
-		}
-		return user;
-
-	}
-
-
-
-	public void registrarUsuario(Usuario user) throws SQLException 
-	{
-		String sql = "INSERT INTO ISIS2304A241720.USUARIO VALUES (";
-		sql += user.getId() + ",'";
-		sql += user.getNombre() + "','";
-		sql += user.getCorreo() + "',";
-		sql += user.getRol()+ ")";
-
-		System.out.println("SQL stmt:" + sql);
-
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
-	}
-
-	public void registrarCliente(Usuario user) throws SQLException
-	{
-		String sql = "INSERT INTO ISIS2304A241720.USUARIO VALUES (";
-		sql += user.getId() + ",'";
-		sql += user.getNombre() + "','";
-		sql += user.getCorreo() + "',";
-		sql += 2+ ")";
-
-		System.out.println("SQL stmt:" + sql);
-
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
-	}
-
-	public void registrarCompania(Compania comp) throws SQLException
-	{
-		String sql = "INSERT INTO ISIS2304A241720.COMPANIA VALUES(";
-		sql+= comp.getId()+ ",'";
-		sql+=comp.getNombre() + "','";
-		sql += comp.getRepresentante() + "','";
-		sql += comp.getPaisOrigen() + "','";
-		sql += comp.getPaginaWeb() + "','";
-		sql += comp.getFechaLlegada() + "','";
-		sql += comp.getFechaSalida() + "',";
-		sql += comp.getIdFestival()+ ",";
-		sql += comp.getIdOrganizador()+")";
-
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
-	}
-
-	public void registrarSitio(Sitio sitio) throws SQLException
-	{
-		String sql = "INSERT INTO ISIS2304A241720.SITIO VALUES(";
-		sql+= sitio.getId() + ",'";
-		sql+=sitio.getTipo() +"',";
-		sql+=sitio.getCapacidad()+",'";
-		sql+=sitio.getDisponibilidad() + "','";
-		sql+=sitio.getProteAtmosfera() +"')";
-
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
-	}
-
-	public void registrarLocalidad(Localidad local) throws SQLException
-	{
-		String sql = "INSERT INTO ISIS2304A241720.LOCALIDAD VALUES( ";
-		sql+= local.getId() + ",'";
-		sql+= local.getNombre() + "',";
-		sql+=local.getCapacidad() + ",";
-		sql+=local.getIdSitio() + ",";
-		sql+=local.getPrecio() +",'";
-		sql+=local.getSillaNumerada()+"'";
-
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
-	}
-
-	public void registrarEspectaculo(Espectaculo espec) throws SQLException
-	{
-		String sql = "INSERT INTO ISIS2304A241720.ESPECTACULO VALUES( ";
-		sql+= espec.getId() + ",'";
-		sql+= espec.getNombre() + "',";
-		sql+=espec.getDuracion() + ",'";
-		sql+=espec.getIdioma() + "',";
-		sql+=espec.getCosto() +",'";
-		sql+=espec.getDescripcion()+"','";
-		sql+=espec.getServicioTraduccion()+"','";
-		sql+=espec.getParticipacion()+"','";
-		sql+=espec.getPublicoObjetivo()+"',";
-		sql+=espec.getIdCompania() + ",";
-		sql+=espec.getIdOperario()+")";
-
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
-	}
-
-	public void programarFuncion(Funcion funcion) throws SQLException
-	{
-		String sql = "INSERT INTO ISIS2304A241720.FUNCION VALUES(";
-		sql+=funcion.getId() + ",'";
-		sql+=funcion.getFecha() + "',";
-		sql+=funcion.getIdSitio() + ",";
-		sql+=funcion.getIdEspectaculo() + ",'";
-		sql+=funcion.getHora()+"','";
-		sql+=funcion.getRealizada()+"')";
-
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
-
-		funcion.setSitio(buscarSitio(funcion.getIdSitio()));
-		funcion.setEspectaculo(buscarEspectaculo(funcion.getIdEspectaculo()));
-
-	}
-
-	public Sitio buscarSitio(Long id) throws SQLException
-	{
-
-		String sql = "SELECT * FROM ISIS2304A241720.SITIO WHERE ID_SITIO = " + id;
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		Sitio st = null;
-		if(rs.next())
-		{
-			Long idS = Long.parseLong(rs.getString("ID_SITIO"));
-			char tipo = (rs.getString("TIPO")).charAt(0);
-			int capacidad = Integer.parseInt(rs.getString("CAPACIDAD"));
-			String horario = rs.getString("HORARIO_DISPONIBILIDAD");
-			char protec = (rs.getString("PROTECCION_ATMOSFERICA")).charAt(0);
-			st = new Sitio(idS, tipo, capacidad, horario, protec);
-		}
-		return st;
-	}
-	
-	public Compania buscarCompania(Long id) throws SQLException
-	{
-		String sql = "SELECT * FROM ISIS2304A241720.COMPANIA WHERE ID_COMPA = " + id;
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		Compania st = null;
-		if(rs.next())
-		{
-			Long idComp = Long.parseLong(rs.getString("ID_COMPA"));
-			String nombre = rs.getString("NOMBRE_COMPA");
-			String repre = rs.getString("REPRESEN_COMPA");
-			String pais = rs.getString("PAIS_ORIGEN_COMPA");
-			String pagWeb = rs.getString("PAG_WEB_COMPA");
-			String llegada = rs.getString("FECHA_LLEGADA_COMPA");
-			String salida = rs.getString("FECHA_SALIDA_COMPA");
-			Long idFest = Long.parseLong(rs.getString("ID_FESTIVAL"));
-			Long idOrga = Long.parseLong(rs.getString("ID_ORGANI"));
-			st = new Compania(idComp, nombre, repre, pais, pagWeb, llegada, salida, idFest, idOrga);
-		}
-		return st;
-	}
-
-	public Espectaculo buscarEspectaculo(Long id) throws SQLException
-	{
-
-		String sql = "SELECT * FROM ISIS2304A241720.ESPECTACULO WHERE ID_ESPEC = " + id;
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		Espectaculo espect = null;
-		if(rs.next())
-		{
-			Long idS = Long.parseLong(rs.getString("ID_ESPEC"));
-			String nombre = (rs.getString("NOMBRE"));
-			int duracion = Integer.parseInt(rs.getString("DURACION"));
-			String idioma = (rs.getString("IDIOMA"));
-			int costo = Integer.parseInt(rs.getString("COSTO"));
-			String descripcion = rs.getString("DESCRIPCION");
-			char tradu = (rs.getString("SERVICIO_TRADU")).charAt(0);
-			boolean traduc = false;
-			if(tradu=='S')
-				traduc=true;
-			boolean parti = false;
-			char participacion = (rs.getString("SERVICIO_TRADU")).charAt(0);
-			if(participacion=='S')
-				parti = true;
-			String publicoObjetivo = rs.getString("PUBLICO_OBJETIVO");
-			Long idCom = Long.parseLong(rs.getString("ID_COMPANIA"));
-			Long idOper = Long.parseLong(rs.getString("ID_OPERARIO"));
-			espect  = new Espectaculo(idS, nombre, duracion, idioma, costo, descripcion, tradu, participacion, publicoObjetivo, idCom, idOper);
-		}
-		return espect;
-	}
-
-	public Boleta buscarBoleta(Long id) throws SQLException
-	{
-
-		String sql = "SELECT * FROM ISIS2304A241720.BOLETA WHERE ID_BOLETA = " + id;
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		Boleta boleta = null;
-		if(rs.next())
-		{
-			Long idFuncion = Long.parseLong(rs.getString("ID_FUNCION"));
-			Long idSilla = Long.parseLong(rs.getString("ID_SILLA"));
-			char estado = (rs.getString("ESTADO")).charAt(0);
-			Long idCliente = Long.parseLong(rs.getString("ID_CLIENTE"));
-			Long idAbonamiento = Long.parseLong(rs.getString("ID_ABONAMIENTO"));
-
-			boleta = new Boleta(id, idFuncion, idSilla, 0, estado);
-			boleta.setFuncion(buscarFuncion(idFuncion));
-			boleta.setSilla(buscarSilla(idSilla));
-			boleta.setLocalidad(buscarLocalidad(boleta.getSilla().getIdLocalidad()));
-			boleta.setIdCliente(idCliente);
-			boleta.setPrecio(boleta.getLocalidad().getPrecio());
-			boleta.setIdAbonamiento(idAbonamiento);
-			boleta.setFuncion(buscarFuncion(idFuncion));
-		}
-		return boleta;
-	}
-
-
-	public void agregarPreferencia(Preferencia prefe, Long id) throws SQLException
-	{
-		String sql2 ="SELECT * FROM ISIS2304A241720.USUARIO WHERE ISIS2304A241720.USUARIO.ID_USER=" + id;
-		System.out.println("SQL stmt:" + sql2);
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-		ResultSet er = prepStmt2.executeQuery();
-		if(er.next()){
-			String sql = "INSERT INTO ISIS2304A241720.PREFERENCIA VALUES(";
-			sql+=prefe.getId() + ",'";
-			sql+=prefe.getNombre()+"','";
-			sql+=prefe.getDescripcion()+"')";
-
-			System.out.println("SQL stmt:" + sql);
-			PreparedStatement prepStmt = conn.prepareStatement(sql);
-			recursos.add(prepStmt);
-			prepStmt.executeQuery();
-			Long idPref = prefe.getId();
-
-			String sql3 = "INSERT INTO ISIS2304A241720.CLIENTE_PREFERENCIA VALUES(";
-			sql3+= idPref +",";
-			sql3+= id+")";
-			System.out.println("SQL stmt:" + sql3);
-			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
-			recursos.add(prepStmt3);
-			prepStmt3.executeQuery();
-
-		}
-
-	}
-
-	public void deletePreferencia(Preferencia prefe, Long id) throws SQLException
-	{
-		String sql = "DELETE FROM ISIS2304A241720.CLIENTE_PREFERENCIA WHERE ISIS2304A241720.CLIENTE_PREFERENCIA.ID_PREFERENCIA=" + 
-				prefe.getId() + " AND ISIS2304A241720.CLIENTE_PREFERENCIA.ID_CLIENTE = " + id;
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet er = prepStmt.executeQuery();
-		if(er.next())
-		{
-			String sql2 = "DELETE FROM ISIS2304A241720.PREFERENCIA WHERE ISIS2304A241720.PREFERENCIA.ID_PREFERENCIA =" + 
-					prefe.getId();
-			System.out.println("SQL stmt:" + sql2);
-			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-			recursos.add(prepStmt2);
-			prepStmt2.executeQuery();
-		}
-	}
-
-	public void updatePreferencia(Preferencia prefe) throws SQLException
-	{
-		String sql = "UPDATE ISIS2304A241720.PREFERENCIA SET ";
-		sql+="ISIS2304A241720.PREFERENCIA.TIPO_PREFERENCIA ="+"'"+ prefe.getNombre()+"'";
-		sql+=", ISIS2304A241720.PREFERENCIA.DESCRIPCION="+"'"+ prefe.getDescripcion()+"'";
-		sql+=" WHERE ISIS2304A241720.PREFERENCIA.ID_PREFERENCIA = " + prefe.getId(); 
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
-	}
-
-	public Preferencia buscarPreferencia(Long id) throws SQLException
-	{
-		String sql = "SELECT * FROM ISIS2304A241720.PREFERENCIA WHERE ID_PREFERENCIA = " + id;
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet er = prepStmt.executeQuery();
-		Preferencia prefe = null;
-		if(er.next())
-		{
-			String tipo = er.getString("TIPO_PREFERENCIA");
-			String descripcion = er.getString("DESCRIPCION");
-			prefe = new Preferencia(id, tipo, descripcion);
-		}
-		return prefe;
-	}
-
-
-	public Boleta venderBoleta(Long idFuncion, Long idSilla, Long idCliente, Long idAbonamiento) throws SQLException
-	{
-		Silla silla = buscarSilla(idSilla);
-		if(silla==null)
-			throw new SQLException("No se encontró la silla");
-		Localidad local = buscarLocalidad(silla.getIdLocalidad());
-		if(local==null)
-			throw new SQLException("No se encontró la localidad");
-		silla.setLocalidad(local);
-		local.setSitio(buscarSitio(local.getIdSitio()));
-		Funcion funcion = buscarFuncion(idFuncion);
-		if(funcion==null)
-			throw new SQLException("No se encontró la función. Por favor selecciona una función existente.");
-		funcion.setSitio(buscarSitio(funcion.getIdSitio()));
-		funcion.setEspectaculo(buscarEspectaculo(funcion.getIdEspectaculo()));
-		String sql = "SELECT * FROM ISIS2304A241720.SILLAS NATURAL JOIN ISIS2304A241720.LOCALIDAD WHERE NUMERO =" + silla.getNumero()
-		+ " AND " + "LOCALIDAD.NOMBRE= '" + silla.getLocalidad().getNombre()+"'";	
-		System.out.println("SQL stmt:" + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		while(rs.next())
-		{
-			//Verificar que una boleta no se haya vendido
-			String sql1 = "SELECT * FROM ISIS2304A241720.BOLETA WHERE ID_SILLA="+silla.getId() + "and ID_FUNCION = " + idFuncion;
-			System.out.println("SQL stmt:" + sql1);
-			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
-			recursos.add(prepStmt1);
-			ResultSet rsBoleta = prepStmt1.executeQuery();
-			if(rsBoleta.next()){
-				throw new SQLException("Ya hay una boleta para la silla: "+idSilla + " y la funci�n: " +idFuncion);
-			}
-			else{
-
-
-				String sql2="INSERT INTO ISIS2304A241720.BOLETA VALUES( sequence_boleta.NEXTVAL,"+ idFuncion
-						+ "," + idSilla+ "," + idCliente + "," + idAbonamiento + ","  + "'A'" + ")";
-				String key[] = {"ID_BOLETA"};
-				PreparedStatement prepStmt2 = conn.prepareStatement(sql2,key);
-				recursos.add(prepStmt2);
-				prepStmt2.executeUpdate();
-				System.out.println("SQL stmt:" + sql2);
-				ResultSet rsInsert = prepStmt2.getGeneratedKeys();
-				Long id = null;
-				if (rsInsert.next()) {
-					id = rsInsert.getLong(1);
-					System.out.println(id);
-				}
-				Boleta boletaVendida = new Boleta(id,funcion.getId(), silla.getId(),0,'A');
-				boletaVendida.setIdCliente(idCliente);
-				boletaVendida.setId(id);
-				boletaVendida.setFuncion(funcion);
-				boletaVendida.setSilla(silla);
-				boletaVendida.setLocalidad(local);
-				boletaVendida.setCliente(darCliente(idCliente));
-				boletaVendida.setPrecio(local.getPrecio());
-
-				return boletaVendida;
-			}
-
-		}
-		return null;
-	}
-
-	public Funcion marcarRealizada(Long idFuncion) throws SQLException
-	{
-		Funcion fun = buscarFuncion(idFuncion);
-		if(fun==null)
-			throw new SQLException("No existe la función");
-		if(fun.getRealizada()=='N')
-		{
-			String sql = "UPDATE FUNCION SET REALIZADA = 'S' WHERE ID_FUNCION = " + idFuncion;
-			PreparedStatement st = conn.prepareStatement(sql);
-			recursos.add(st);
-			st.executeUpdate();
-			fun = buscarFuncion(idFuncion);
-			fun.setEspectaculo(buscarEspectaculo(fun.getIdEspectaculo()));
-			fun.setSitio(buscarSitio(fun.getIdSitio()));
-		}
-		return fun;
-	}
-
-
-
-	public Silla buscarSilla(Long id) throws SQLException
-	{
-		String sql = "SELECT * FROM ISIS2304A241720.SILLAS WHERE ID_SILLA = " + id;
-		System.out.println("SQL stmt: "+ sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		if(rs.next())
-		{
-			Long idS = Long.parseLong(rs.getString("ID_SILLA"));
-			int numero = Integer.parseInt(rs.getString("NUMERO"));
-			Long idL = Long.parseLong(rs.getString("ID_LOCALIDAD"));
-			return new Silla(idS, idL, numero);
-		}
-		return null;
-	}
-
-	public Localidad buscarLocalidad(Long id) throws SQLException
-	{
-		String sql = "SELECT * FROM ISIS2304A241720.LOCALIDAD WHERE ID_LOCALIDAD = " + id;
-		System.out.println("SQL stmt: "+ sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		if(rs.next())
-		{
-			Long idL = Long.parseLong(rs.getString("ID_LOCALIDAD"));
-			String nombre = rs.getString("NOMBRE");
-			int capacidad = Integer.parseInt(rs.getString("CAPACIDAD"));
-			Long idS = Long.parseLong(rs.getString("ID_SITIO"));
-			int precio = Integer.parseInt(rs.getString("PRECIO"));
-			boolean sillaNumerada = false;
-			char sillaNum = (rs.getString("SILLA_NUMERADA")).charAt(0);
-			if(sillaNum=='S')
-			{
-				sillaNumerada=true;
-			}
-
-			return new Localidad(idL, idS, nombre, capacidad,sillaNum, precio);
-		}
-		return null;
-	}
-
-	public Funcion buscarFuncion(Long id)throws SQLException
-	{
-		String sql = "SELECT * FROM ISIS2304A241720.FUNCION WHERE ID_FUNCION = " + id;
-		System.out.println("SQL stmt: "+ sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		if(rs.next())
-		{
-			Long idF = Long.parseLong(rs.getString("ID_FUNCION"));
-			String fecha = rs.getString("FECHA");
-			Long idS = Long.parseLong(rs.getString("ID_SITIO"));
-			Long idE = Long.parseLong(rs.getString("ID_ESPECTACULO"));
-			int hora = Integer.parseInt(rs.getString("HORA"));
-			char realizada = (rs.getString("REALIZADA")).charAt(0);
-			Funcion func = new Funcion(idF, fecha, idS, idE, hora, realizada);
-			func.setEspectaculo(buscarEspectaculo(idE));
-
-			return func;
-		}
-		return null;
-	}
-
-	public Cliente darCliente(Long id) throws SQLException{
-		Cliente user = null;
-		String sql = "SELECT * FROM USUARIO WHERE ID_USER = " + id;
-		System.out.println("SQL stmt:" + sql);
-
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		while(rs.next())
-		{
-			Long id1 = Long.parseLong(rs.getString("ID_USER"));
-			String nombre = (rs.getString("NOMBRE_USER"));
-			String correo = rs.getString("CORREO_USER");
-			//Long rol = Long.parseLong(rs.getString("ROL_USER"));
-			user = new Cliente(id1, nombre, correo);
-		}
-		return user;
-
 	}
 
 	/**
@@ -640,8 +120,10 @@ public class DAOTablaFestival {
 	
 	public ArrayList<ArrayList<FuncionRespuestaCliente>> generarReporteAsistenciaCliente(String idCliente) throws SQLException
 	{
+		DAOTablaUsuario daoUsuario = new DAOTablaUsuario();
+		daoUsuario.setConn(conn);
 		Long idclientex = Long.parseLong(idCliente);
-		if(darCliente(idclientex) == null)
+		if(daoUsuario.darCliente(idclientex) == null)
 		{
 			throw new SQLException("El cliente con el id " + idCliente + " no esta registrado en el sistema");
 		}
@@ -701,7 +183,7 @@ public class DAOTablaFestival {
 		resp.add(activasNoRealizadas);
 		resp.add(devueltasRealizadas);
 		resp.add(devueltasNoRealizadas);
-		
+		daoUsuario.cerrarRecursos();
 		return resp;
 	}
 
@@ -750,9 +232,11 @@ public class DAOTablaFestival {
 
 	public ArrayList darReporteCompania(String idCompania) throws SQLException
 	{
+		DAOTablaCompania daoCompania = new DAOTablaCompania();
+		daoCompania.setConn(conn);
 		ArrayList<FuncionCompania> funciones = new ArrayList<>();	
 		
-		if(buscarCompania(Long.parseLong(idCompania)) == null)
+		if(daoCompania.buscarCompania(Long.parseLong(idCompania)) == null)
 			throw new SQLException("La compania con id " + idCompania + " no existe");
 		
 		String sql = "WITH TABLA1 AS (SELECT ID_ESPEC, NOMBRE, ID_COMPANIA FROM "+
@@ -792,16 +276,18 @@ public class DAOTablaFestival {
 			
 			funciones.add(fc);
 		}
-		
+		daoCompania.cerrarRecursos();
 		return funciones;
 	}
 	
 	
 	public ArrayList darReporteCompaniaParaCliente(String idCompania, String idCliente) throws SQLException
 	{
+		DAOTablaCompania daoCompania = new DAOTablaCompania();
+		daoCompania.setConn(conn);
 		ArrayList<FuncionCompania> funciones = new ArrayList<>();
 		
-		if(buscarCompania(Long.parseLong(idCompania)) == null)
+		if(daoCompania.buscarCompania(Long.parseLong(idCompania)) == null)
 			throw new SQLException("La compania con id " + idCompania + " no existe");
 		
 		String sql = "WITH TABLA0 AS (SELECT ID_FUNCION FROM ISIS2304A241720.BOLETA WHERE ID_CLIENTE = "+idCliente+"), "+
@@ -843,7 +329,7 @@ public class DAOTablaFestival {
 			
 			funciones.add(fc);
 		}
-		
+		daoCompania.cerrarRecursos();
 		return funciones;
 	}
 	
@@ -1027,8 +513,10 @@ public class DAOTablaFestival {
 
 	public NotaDebito actualizarDevBoleta(Long idBoleta, Long idUsuario, String fecha) throws SQLException, ParseException
 	{
+		DAOTablaBoleta daoBoleta = new DAOTablaBoleta();
+		daoBoleta.setConn(conn);
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		Boleta boleta = buscarBoleta(idBoleta);
+		Boleta boleta = daoBoleta.buscarBoleta(idBoleta);
 		if(boleta==null)
 			throw new SQLException("La boleta con el id: " + idBoleta+ "no se encuentra en el sistema");
 		if(!boleta.getIdCliente().equals(idUsuario))
@@ -1165,16 +653,7 @@ public class DAOTablaFestival {
 		return idsBoletas;
 	}
 
-	public void cancelarFuncion(Long idFuncion) throws SQLException {
-		
-		String sql = "delete from funcion where id_funcion = " + idFuncion;
-		System.out.println("SQL stmt: " + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		ResultSet rs = prepStmt.executeQuery();
-		if(!rs.next())
-			throw new SQLException("No se pudo eliminar la funcion con id: " + idFuncion);
-		
-	}
+
 	
 
 

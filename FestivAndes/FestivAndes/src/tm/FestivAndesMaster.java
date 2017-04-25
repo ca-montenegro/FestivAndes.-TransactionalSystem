@@ -10,7 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import dao.DAOTablaBoleta;
+import dao.DAOTablaCompania;
+import dao.DAOTablaEspectaculo;
 import dao.DAOTablaFestival;
+import dao.DAOTablaFuncion;
+import dao.DAOTablaLocalidad;
+import dao.DAOTablaPreferencia;
+import dao.DAOTablaSilla;
+import dao.DAOTablaSitio;
+import dao.DAOTablaUsuario;
 import vos.Abonamiento;
 import vos.Boleta;
 import vos.Compania;
@@ -139,7 +148,7 @@ public class FestivAndesMaster {
 	 */
 	public ArrayList<Usuario> darUsuarios() throws Exception {
 		ArrayList<Usuario> usuarios;
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaUsuario daoFestival = new DAOTablaUsuario();
 		try 
 		{
 			//////Transacción
@@ -173,7 +182,7 @@ public class FestivAndesMaster {
 
 	public Usuario buscarUsuarioPorID(Long id) throws Exception {
 
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaUsuario daoFestival = new DAOTablaUsuario();
 		Usuario usuario = null;
 		try 
 		{
@@ -212,7 +221,7 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando el usuario
 	 */
 	public void addUsuario(Usuario usuario) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaUsuario daoFestival = new DAOTablaUsuario();
 		try 
 		{
 			//////Transacción
@@ -249,7 +258,7 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando el cliente
 	 */
 	public void addCliente(Usuario usuario) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaUsuario daoFestival = new DAOTablaUsuario();
 		try 
 		{
 			//////Transacción
@@ -286,7 +295,7 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando la compa�ia
 	 */
 	public void addCompania(Compania compania) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaCompania daoFestival = new DAOTablaCompania();
 		try 
 		{
 			//////Transacción
@@ -323,7 +332,7 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando el sitio
 	 */
 	public void addSitio(Sitio sitio) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaSitio daoFestival = new DAOTablaSitio();
 		try 
 		{
 			//////Transacción
@@ -354,7 +363,7 @@ public class FestivAndesMaster {
 	}
 
 	public void addLocalidad(Localidad local) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaLocalidad daoFestival = new DAOTablaLocalidad();
 		try 
 		{
 			//////Transacción
@@ -391,7 +400,7 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando la funcion
 	 */
 	public void addFuncion(Funcion funcion) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaFuncion daoFestival = new DAOTablaFuncion();
 		try 
 		{
 			//////Transacción
@@ -428,7 +437,7 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando la funcion
 	 */
 	public void addPreferencia(Preferencia preferencia, Long id) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaPreferencia daoFestival = new DAOTablaPreferencia();
 		try 
 		{
 			//////Transacción
@@ -465,7 +474,7 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando la funcion
 	 */
 	public Preferencia deletePreferencia(Long id, Long idP) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaPreferencia daoFestival = new DAOTablaPreferencia();
 		Preferencia prefe = null;
 		try 
 		{
@@ -505,7 +514,7 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando la funcion
 	 */
 	public void updatePreferencia(Preferencia preferencia, Long id) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaPreferencia daoFestival = new DAOTablaPreferencia();
 		try 
 		{
 			//////Transacción
@@ -772,7 +781,7 @@ public class FestivAndesMaster {
 	}
 
 	public Boleta venderBoleta(Long idFuncion, Long	 idSilla, Long idCliente, Long idAbonamiento) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaBoleta daoFestival = new DAOTablaBoleta();
 		Boleta boleta = null;
 		try 
 		{
@@ -805,7 +814,7 @@ public class FestivAndesMaster {
 	}
 
 	public Boleta verificarLocalidadSillas( Long idSilla, int cantidad) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaSilla daoFestival = new DAOTablaSilla();
 		Boleta boleta = null;
 		try 
 		{
@@ -855,7 +864,7 @@ public class FestivAndesMaster {
 
 			this.conn = darConexion();
 			conn.setAutoCommit(false);
-			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			daoFestival.setConn(conn);
 			conn.setSavepoint();
 			for(int i = 0; i<cantidad;i++){
@@ -890,7 +899,7 @@ public class FestivAndesMaster {
 
 	public Boleta venderBoletasVarias(Long idFuncion, Long idSilla, Long idCliente) throws SQLException
 	{
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaBoleta daoFestival = new DAOTablaBoleta();
 		Boleta boleta = null;
 		try 
 		{
@@ -919,15 +928,15 @@ public class FestivAndesMaster {
 	 * @throws Exception - cualquier error que se genera agregando la funcion
 	 */
 	public Funcion marcarRealizadaFuncion(Long idFuncion) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaFuncion daoFuncion = new DAOTablaFuncion();
 		Funcion funcion = null;
 		try 
 		{
 			//////Transacción
 			this.conn = darConexion();
-			daoFestival.setConn(conn);
+			daoFuncion.setConn(conn);
 
-			funcion = daoFestival.marcarRealizada(idFuncion);
+			funcion = daoFuncion.marcarRealizada(idFuncion);
 			conn.commit();
 
 		} catch (SQLException e) {
@@ -940,7 +949,7 @@ public class FestivAndesMaster {
 			throw e;
 		} finally {
 			try {
-				daoFestival.cerrarRecursos();
+				daoFuncion.cerrarRecursos();
 				if(this.conn!=null)
 					this.conn.close();
 			} catch (SQLException exception) {
@@ -954,7 +963,7 @@ public class FestivAndesMaster {
 
 
 	public void addEspectaculo(Espectaculo espec) throws Exception {
-		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaEspectaculo daoFestival = new DAOTablaEspectaculo();
 		Funcion funcion = null;
 		try 
 		{
@@ -1278,7 +1287,7 @@ public class FestivAndesMaster {
 			//////Transacción
 			this.conn = darConexion();
 			conn.setAutoCommit(false);
-			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			daoFestival.setConn(conn);
 			conn.setSavepoint();
 			Long idAbonamiento = daoFestival.verificarFecha(abonamiento.getFechaConsulta());
@@ -1345,7 +1354,7 @@ public class FestivAndesMaster {
 		try {
 			this.conn = darConexion();
 			conn.setAutoCommit(false);
-			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			daoFestival.setConn(conn);
 			conn.setSavepoint();
 			idsBoletas = daoFestival.obtenerIdBoletaAbonados(idAbonamiento);
@@ -1401,12 +1410,14 @@ public class FestivAndesMaster {
 	public ArrayList<NotaDebito> devolverBoletasFunCancel(Long idFuncion, String fecha) {
 		// TODO Auto-generated method stub
 		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		DAOTablaFuncion daoFuncion = new DAOTablaFuncion();
+		daoFuncion.setConn(conn);
 		ArrayList<String> idsBoletas;
 		ArrayList<NotaDebito> notasDebito = new ArrayList<>();
 		try {
 			this.conn = darConexion();
 			conn.setAutoCommit(false);
-			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			daoFestival.setConn(conn);
 			conn.setSavepoint();
 			idsBoletas = daoFestival.obtenerIdBoletaFunCancelada(idFuncion);
@@ -1417,7 +1428,7 @@ public class FestivAndesMaster {
 				notasDebito.add(actualizarDevBoleta(idUsuario, idBoleta, fecha));
 
 			}
-			daoFestival.cancelarFuncion(idFuncion);
+			daoFuncion.cancelarFuncion(idFuncion);
 			conn.setAutoCommit(true);
 			conn.commit();
 		} catch (SQLException e) {
@@ -1443,7 +1454,9 @@ public class FestivAndesMaster {
 		} finally {
 			try {
 				conn.setAutoCommit(true);
+				daoFuncion.cerrarRecursos();
 				daoFestival.cerrarRecursos();
+				
 				if(this.conn!=null)
 					this.conn.close();
 			} catch (SQLException exception) {
