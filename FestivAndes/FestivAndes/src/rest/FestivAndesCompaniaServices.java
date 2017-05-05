@@ -1,10 +1,11 @@
-package rest;
+	package rest;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -13,6 +14,8 @@ import javax.ws.rs.core.Response;
 
 import tm.FestivAndesMaster;
 import vos.ListaRentabilidad;
+import vos.ListaRespuestaAsistencia;
+import vos.ListaUsuarios;
 import vos.Rentabilidad;
 
 /**
@@ -68,4 +71,22 @@ public class FestivAndesCompaniaServices {
 			}
 			return Response.status(200).entity(rentabilidades).build();
 		}
+		
+		@GET
+		@Path("/siAsistieron")
+		@Consumes(MediaType.APPLICATION_JSON)
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response informeAsistencia(@PathParam("id") Long idCompania)
+		{
+			System.out.println(idCompania);
+			FestivAndesMaster tm = new FestivAndesMaster(getPath());
+			ListaUsuarios lista;
+			try {
+				lista = tm.siAsistieron(idCompania);
+			} catch (Exception e) {
+				return Response.status(500).entity(doErrorMessage(e)).build();
+			}
+			return Response.status(200).entity(lista).build();
+		}
+
 }

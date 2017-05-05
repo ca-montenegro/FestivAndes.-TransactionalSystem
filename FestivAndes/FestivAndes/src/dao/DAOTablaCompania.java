@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import vos.Compania;
+import vos.Usuario;
 
 public class DAOTablaCompania {
 
@@ -93,5 +94,23 @@ public class DAOTablaCompania {
 		}
 		return st;
 	}
-
+	
+	public ArrayList<Usuario> siAsistieron(Long id) throws SQLException
+	{
+		ArrayList<Usuario> usuarios = new ArrayList<>();
+		String sql = " ";
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idUsuario = Long.parseLong(rs.getString("ID_CLIENTE"));
+			String nombre = rs.getString("NOMBRE_USER");
+			String correo = rs.getString("CORREO_USER");
+			Long rol = Long.parseLong(rs.getString("ROL_USER"));
+			Usuario aux = new Usuario(idUsuario, nombre, correo, rol);
+			usuarios.add(aux);
+		}
+		return usuarios;
+	}
 }

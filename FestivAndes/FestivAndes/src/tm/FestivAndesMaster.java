@@ -34,6 +34,7 @@ import vos.ListaLocalidades;
 import vos.ListaPorEstado;
 import vos.ListaPorRealizacion;
 import vos.ListaRespuestaAsistencia;
+import vos.ListaUsuarios;
 import vos.Localidad;
 import vos.MasPopuEspectaculo;
 import vos.NotaDebito;
@@ -1474,6 +1475,41 @@ public class FestivAndesMaster {
 		return notasDebito;
 	}
 
+	public ListaUsuarios siAsistieron(Long idCompania) throws SQLException
+	{
+		ArrayList<Usuario> resp;
+		
+		DAOTablaCompania daoCompania = new DAOTablaCompania();
+		
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			daoCompania.setConn(conn);
+			resp = daoCompania.siAsistieron(idCompania);
+			conn.commit();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoCompania.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return new ListaUsuarios(idCompania, resp);
+	}
 
 
 }
