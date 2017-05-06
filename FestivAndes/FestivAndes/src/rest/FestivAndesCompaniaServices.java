@@ -88,5 +88,22 @@ public class FestivAndesCompaniaServices {
 			}
 			return Response.status(200).entity(lista).build();
 		}
+		
+		@GET
+		@Path("/noAsistieron")
+		@Consumes(MediaType.APPLICATION_JSON)
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response informeNoAsistencia(@PathParam("id") Long idCompania)
+		{
+			System.out.println(idCompania);
+			FestivAndesMaster tm = new FestivAndesMaster(getPath());
+			ListaUsuarios lista;
+			try {
+				lista = tm.noAsistieron(idCompania);
+			} catch (Exception e) {
+				return Response.status(500).entity(doErrorMessage(e)).build();
+			}
+			return Response.status(200).entity(lista).build();
+		}
 
 }

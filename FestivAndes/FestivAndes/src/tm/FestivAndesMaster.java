@@ -1510,6 +1510,42 @@ public class FestivAndesMaster {
 		}
 		return new ListaUsuarios(idCompania, resp);
 	}
+	
+	public ListaUsuarios noAsistieron(Long idCompania) throws SQLException
+	{
+		ArrayList<Usuario> resp;
+		
+		DAOTablaCompania daoCompania = new DAOTablaCompania();
+		
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			daoCompania.setConn(conn);
+			resp = daoCompania.noAsistieron(idCompania);
+			conn.commit();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoCompania.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return new ListaUsuarios(idCompania, resp);
+	}
 
 
 }

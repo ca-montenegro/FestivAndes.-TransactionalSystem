@@ -98,7 +98,36 @@ public class DAOTablaCompania {
 	public ArrayList<Usuario> siAsistieron(Long id) throws SQLException
 	{
 		ArrayList<Usuario> usuarios = new ArrayList<>();
-		String sql = " ";
+		String idcompa = String.valueOf(id);
+		String sql = "with tabla1 as (select id_funcion as id_fun from ((select id_espec from ISIS2304A241720.espectaculo where id_compania =" + idcompa + ")"
+				+ " inner join ISIS2304A241720.funcion on id_espec = id_espectaculo)),"
+				+ " tabla2 as (select distinct id_cliente from tabla1 inner join (select * from ISIS2304A241720.boleta where estado = 'A')"
+				+ " on id_fun = id_funcion)"
+				+ " select * from (tabla2 inner join ISIS2304A241720.usuario on id_cliente = id_user)";
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idUsuario = Long.parseLong(rs.getString("ID_CLIENTE"));
+			String nombre = rs.getString("NOMBRE_USER");
+			String correo = rs.getString("CORREO_USER");
+			Long rol = Long.parseLong(rs.getString("ROL_USER"));
+			Usuario aux = new Usuario(idUsuario, nombre, correo, rol);
+			usuarios.add(aux);
+		}
+		return usuarios;
+	}
+	
+	public ArrayList<Usuario> noAsistieron(Long id) throws SQLException
+	{
+		ArrayList<Usuario> usuarios = new ArrayList<>();
+		String idcompa = String.valueOf(id);
+		String sql = "with tabla1 as (select id_funcion as id_fun from ((select id_espec from ISIS2304A241720.espectaculo where id_compania =" + idcompa + ")"
+				+ " inner join ISIS2304A241720.funcion on id_espec = id_espectaculo)),"
+				+ " tabla2 as (select distinct id_cliente from tabla1 inner join (select * from ISIS2304A241720.boleta where estado = 'D')"
+				+ " on id_fun = id_funcion)"
+				+ " select * from (tabla2 inner join ISIS2304A241720.usuario on id_cliente = id_user)";
 		System.out.println("SQL stmt: " + sql);
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		ResultSet rs = prepStmt.executeQuery();
