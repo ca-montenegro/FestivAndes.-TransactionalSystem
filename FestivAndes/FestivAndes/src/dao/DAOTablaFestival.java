@@ -652,6 +652,26 @@ public class DAOTablaFestival {
 		}
 		return idsBoletas;
 	}
+	
+	public ArrayList<Usuario> buenosClientes(Long numBoletas) throws SQLException
+	{
+		ArrayList<Usuario> usuarios = new ArrayList<>();
+		String numBol = String.valueOf(numBoletas);
+		String sql = "";
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idUsuario = Long.parseLong(rs.getString("ID_CLIENTE"));
+			String nombre = rs.getString("NOMBRE_USER");
+			String correo = rs.getString("CORREO_USER");
+			Long rol = Long.parseLong(rs.getString("ROL_USER"));
+			Usuario aux = new Usuario(idUsuario, nombre, correo, rol);
+			usuarios.add(aux);
+		}
+		return usuarios;
+	}
 
 
 	

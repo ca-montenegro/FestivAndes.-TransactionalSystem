@@ -26,6 +26,7 @@ import vos.Compania;
 import vos.Espectaculo;
 import vos.InformacionVentaFuncion;
 import vos.InformacionVentaLocalidad;
+import vos.ListaBuenosClientes;
 import vos.ListaFuncioneSitio;
 import vos.ListaFuncionesCompania;
 import vos.ListaInformacion;
@@ -1547,5 +1548,40 @@ public class FestivAndesMaster {
 		return new ListaUsuarios(idCompania, resp);
 	}
 
+	public ListaBuenosClientes buenosClientes(Long numBoletas) throws SQLException
+	{
+		ArrayList<Usuario> resp;
+		
+		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			daoFestival.setConn(conn);
+			resp = daoFestival.buenosClientes(numBoletas);
+			conn.commit();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoFestival.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return new ListaBuenosClientes(numBoletas, resp);
+	}
 
 }

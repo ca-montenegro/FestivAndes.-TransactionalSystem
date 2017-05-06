@@ -25,6 +25,7 @@ import vos.Compania;
 import vos.Espectaculo;
 import vos.Funcion;
 import vos.InformacionVentaLocalidad;
+import vos.ListaBuenosClientes;
 import vos.ListaFuncioneSitio;
 import vos.ListaFuncionesCompania;
 import vos.ListaInformacion;
@@ -37,6 +38,7 @@ import vos.ListaLocalidades;
 import vos.ListaPopulares;
 import vos.ListaRentabilidad;
 import vos.ListaRespuestaAsistencia;
+import vos.ListaUsuarios;
 import vos.ReporteSitio;
 
 import vos.Sitio;
@@ -399,6 +401,23 @@ public class FestivAndesAdminServices {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 		return Response.status(200).type("text/plain").entity(notasDebito.toString()).build();
+	}
+	
+	@GET
+	@Path("/buenosClientes/{numBoletas}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response informeNoAsistencia(@PathParam("numboletas") Long numBoletas)
+	{
+		System.out.println(numBoletas);
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		ListaBuenosClientes lista;
+		try {
+			lista = tm.buenosClientes(numBoletas);
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).entity(lista).build();
 	}
 
 }
