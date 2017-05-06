@@ -132,7 +132,7 @@ public class DAOTablaBoleta {
 		while(rs.next())
 		{
 			//Verificar que una boleta no se haya vendido
-			String sql1 = "SELECT * FROM ISIS2304A241720.BOLETA WHERE ID_SILLA="+silla.getId() + "and ID_FUNCION = " + idFuncion;
+			String sql1 = "SELECT * FROM ISIS2304A241720.BOLETA WHERE ID_SILLA="+silla.getId() + "and ID_FUNCION = " + idFuncion+ " and ESTADO = 'A'";
 			System.out.println("SQL stmt:" + sql1);
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);

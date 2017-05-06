@@ -103,4 +103,16 @@ public class DAOTablaEspectaculo {
 		}
 		return espect;
 	}
+
+	public Boolean cancelarFuncion(Long idFuncion) throws SQLException {
+		
+		String sql = "delete from funcion where id_funcion = " + idFuncion;
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		if(rs.next())
+				return false;
+		return true;
+	}
 }

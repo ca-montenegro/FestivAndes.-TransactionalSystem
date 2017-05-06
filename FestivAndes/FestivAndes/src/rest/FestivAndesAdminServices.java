@@ -74,6 +74,10 @@ public class FestivAndesAdminServices {
 	private String doErrorMessage(Exception e){
 		return "{ \"ERROR\": \""+ e.getMessage() + "\"}" ;
 	}
+	
+	private String doErrorMessage(String s){
+		return "{ \"ERROR\": \""+ s + "\"}" ;
+	}
 	@GET
 	@Path("sayHello")
 	public String sayHello(@QueryParam("name")String name) {
@@ -140,7 +144,7 @@ public class FestivAndesAdminServices {
 		}
 		return Response.status(200).entity(lista).build();
 	}
-	
+
 	@GET
 	@Path("/reporteCompania/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -295,7 +299,7 @@ public class FestivAndesAdminServices {
 		return Response.status(200).entity(sitio).build();
 	}
 
-	
+
 
 
 
@@ -333,7 +337,7 @@ public class FestivAndesAdminServices {
 		return Response.status(200).entity(espectaculo).build();
 	}
 
-	
+
 	@POST
 	@Path("/rentabilidad")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -342,7 +346,7 @@ public class FestivAndesAdminServices {
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
 		ListaRentabilidad rentabilidades;
 		try {
-			
+
 			//rentabilidades = tm.darRentabilidad(rent);
 			rentabilidades = new ListaRentabilidad(tm.darRentabilidad(rent));
 		} catch (Exception e) {
@@ -350,7 +354,7 @@ public class FestivAndesAdminServices {
 		}
 		return Response.status(200).entity(rentabilidades).build();
 	}
-	
+
 	@POST
 	@Path("/especPopulares")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -359,7 +363,7 @@ public class FestivAndesAdminServices {
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
 		ListaPopulares masPopuEspectaculo;
 		try {
-			
+
 			//rentabilidades = tm.darRentabilidad(rent);
 			masPopuEspectaculo = new ListaPopulares(tm.darMasPopuEspec(rent));
 		} catch (Exception e) {
@@ -367,7 +371,7 @@ public class FestivAndesAdminServices {
 		}
 		return Response.status(200).entity(masPopuEspectaculo).build();
 	}
-	
+
 	@GET
 	@Path("/asistenciaCliente/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -394,15 +398,21 @@ public class FestivAndesAdminServices {
 		ArrayList<NotaDebito> notasDebito = null;
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
 		try{
-		notasDebito = (tm.devolverBoletasFunCancel(idFuncion, abonamiento.getFechaConsulta()));
-		}
+			notasDebito = (tm.devolverBoletasFunCancel(idFuncion, abonamiento.getFechaConsulta()));
+			if(!tm.cancelarFuncion(idFuncion)){
+				return Response.status(500).entity(doErrorMessage("Ocurrio un problema")).build();
+			}
+		} 
+
+
+
 		catch(Exception e)
 		{
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 		return Response.status(200).type("text/plain").entity(notasDebito.toString()).build();
 	}
-	
+
 	@GET
 	@Path("/buenosClientes/{numBoletas}")
 	@Consumes(MediaType.APPLICATION_JSON)

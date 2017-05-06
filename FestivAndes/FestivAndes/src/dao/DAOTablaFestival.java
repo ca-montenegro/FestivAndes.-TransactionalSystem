@@ -626,15 +626,15 @@ public class DAOTablaFestival {
 		return idsBoletas;
 	}
 	
-	public void borrarBoletasDevueltas() throws SQLException
-	{
-		String sql = "delete from boleta where ESTADO = 'D'";
-		System.out.println("SQL stmt: " + sql);
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		if(!prepStmt.executeQuery().next())
-			throw new SQLException("No se pudieron eliminar las boletas");
-		
-	}
+//	public void borrarBoletasDevueltas() throws SQLException
+//	{
+//		String sql = "delete from boleta where ESTADO = 'D'";
+//		System.out.println("SQL stmt: " + sql);
+//		PreparedStatement prepStmt = conn.prepareStatement(sql);
+//		if(!prepStmt.executeQuery().next())
+//			throw new SQLException("No se pudieron eliminar las boletas");
+//		
+//	}
 	
 	public ArrayList<String> obtenerIdBoletaFunCancelada(Long idFuncion) throws SQLException
 	{

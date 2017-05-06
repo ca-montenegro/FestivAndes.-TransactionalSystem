@@ -581,7 +581,7 @@ public class FestivAndesMaster {
 		}
 		return new ListaInformacion(informacion);
 	}
-	
+
 	public ListaFuncionesCompania generarReporteDeUnaCompania (String idCompania) throws SQLException
 	{
 		ArrayList<FuncionCompania> funciones;
@@ -615,7 +615,7 @@ public class FestivAndesMaster {
 		}
 		return new ListaFuncionesCompania(Long.parseLong(idCompania), funciones);
 	}
-	
+
 	public ListaFuncionesCompania generarReporteDeUnaCompaniaParaCliente (String idCompania, String idCliente) throws SQLException
 	{
 		ArrayList<FuncionCompania> funciones;
@@ -649,8 +649,8 @@ public class FestivAndesMaster {
 		}
 		return new ListaFuncionesCompania(Long.parseLong(idCompania), funciones);
 	}
-	
-	
+
+
 	public ListaRespuestaAsistencia generarReporteAsistenciaCliente(String idCliente) throws SQLException
 	{
 		ListaPorRealizacion realizadas;
@@ -660,9 +660,9 @@ public class FestivAndesMaster {
 		ListaPorEstado devueltasRealizadas;
 		ListaPorEstado devueltasNoRealizadas;
 		ArrayList<ArrayList<FuncionRespuestaCliente>> resp;
-		
+
 		DAOTablaFestival daoFestival = new DAOTablaFestival();
-		
+
 		try 
 		{
 			//////Transacción
@@ -747,16 +747,16 @@ public class FestivAndesMaster {
 		return new ListaInformacionFuncion(informacion);
 
 	}
-	
-	
+
+
 	public Boleta inicVenderBoleta(Long idFuncion, Long idSilla, Long idCliente, Long idAbonamiento) throws Exception {
-		
+
 		Boleta boleta = null;
 		try{
-		
-		this.conn = darConexion();
-		boleta = venderBoleta(idFuncion, idSilla, idCliente, idAbonamiento);
-		conn.commit();
+
+			this.conn = darConexion();
+			boleta = venderBoleta(idFuncion, idSilla, idCliente, idAbonamiento);
+			conn.commit();
 		}
 		catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -768,7 +768,7 @@ public class FestivAndesMaster {
 			throw e;
 		} finally {
 			try {
-				
+
 				if(this.conn!=null)
 					this.conn.close();
 			} catch (SQLException exception) {
@@ -778,8 +778,8 @@ public class FestivAndesMaster {
 			}
 		}
 		return boleta;
-		
-				
+
+
 	}
 
 	public Boleta venderBoleta(Long idFuncion, Long	 idSilla, Long idCliente, Long idAbonamiento) throws Exception {
@@ -802,15 +802,15 @@ public class FestivAndesMaster {
 			e.printStackTrace();
 			throw e;
 		} finally {
-//			try {
-				daoFestival.cerrarRecursos();
-//				//if(this.conn!=null)
-//					//this.conn.close();
-//			} catch (SQLException exception) {
-//				System.err.println("SQLException closing resources:" + exception.getMessage());
-//				exception.printStackTrace();
-//				throw exception;
-//			}
+			//			try {
+			daoFestival.cerrarRecursos();
+			//				//if(this.conn!=null)
+			//					//this.conn.close();
+			//			} catch (SQLException exception) {
+			//				System.err.println("SQLException closing resources:" + exception.getMessage());
+			//				exception.printStackTrace();
+			//				throw exception;
+			//			}
 		}
 		return boleta;
 	}
@@ -1213,7 +1213,7 @@ public class FestivAndesMaster {
 		try {
 			this.conn = darConexion();
 			notaDebito = actualizarDevBoleta(idUsuario, idBoleta, fecha);
-			
+
 			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -1249,7 +1249,7 @@ public class FestivAndesMaster {
 			daoFestival.setConn(conn);
 			notaDebito= daoFestival.actualizarDevBoleta(idBoleta, idUsuario, fecha);
 			conn.commit();
-			daoFestival.borrarBoletasDevueltas();
+			//			daoFestival.borrarBoletasDevueltas();
 			//conn.commit();
 
 		} catch (SQLException e) {
@@ -1408,7 +1408,7 @@ public class FestivAndesMaster {
 		return notasDebito;
 	}
 
-	
+
 	public ArrayList<NotaDebito> devolverBoletasFunCancel(Long idFuncion, String fecha) {
 		// TODO Auto-generated method stub
 		DAOTablaFestival daoFestival = new DAOTablaFestival();
@@ -1458,7 +1458,7 @@ public class FestivAndesMaster {
 				conn.setAutoCommit(true);
 				daoFuncion.cerrarRecursos();
 				daoFestival.cerrarRecursos();
-				
+
 				if(this.conn!=null)
 					this.conn.close();
 			} catch (SQLException exception) {
@@ -1476,12 +1476,47 @@ public class FestivAndesMaster {
 		return notasDebito;
 	}
 
+	public boolean cancelarFuncion(Long idFuncion) throws SQLException
+	{
+		DAOTablaEspectaculo daoEspectaculo = new DAOTablaEspectaculo();
+		Boolean borro;
+		try{
+
+			this.conn = darConexion();
+			daoEspectaculo.setConn(conn);
+			borro = daoEspectaculo.cancelarFuncion(idFuncion);
+		}
+		catch(SQLException e)
+		{
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEspectaculo.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return borro;
+	}
+
+
+
 	public ListaUsuarios siAsistieron(Long idCompania) throws SQLException
 	{
 		ArrayList<Usuario> resp;
-		
+
 		DAOTablaCompania daoCompania = new DAOTablaCompania();
-		
+
 		try 
 		{
 			//////Transacción
@@ -1511,13 +1546,13 @@ public class FestivAndesMaster {
 		}
 		return new ListaUsuarios(idCompania, resp);
 	}
-	
+
 	public ListaUsuarios noAsistieron(Long idCompania) throws SQLException
 	{
 		ArrayList<Usuario> resp;
-		
+
 		DAOTablaCompania daoCompania = new DAOTablaCompania();
-		
+
 		try 
 		{
 			//////Transacción
@@ -1551,9 +1586,9 @@ public class FestivAndesMaster {
 	public ListaBuenosClientes buenosClientes(Long numBoletas) throws SQLException
 	{
 		ArrayList<Usuario> resp;
-		
+
 		DAOTablaFestival daoFestival = new DAOTablaFestival();
-		
+
 		try 
 		{
 			//////Transacción
