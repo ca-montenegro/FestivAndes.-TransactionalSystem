@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import vos.BoletasCompradas;
 import vos.Cliente;
 import vos.Usuario;
 
@@ -123,7 +124,7 @@ public class DAOTablaUsuario {
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
 	}
-	
+
 
 	public Cliente darCliente(Long id) throws SQLException{
 		Cliente user = null;
@@ -144,4 +145,6 @@ public class DAOTablaUsuario {
 		return user;
 
 	}
+
+	
 }

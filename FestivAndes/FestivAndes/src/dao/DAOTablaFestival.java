@@ -14,6 +14,7 @@ import com.sun.javafx.collections.ArrayListenerHelper;
 import sun.security.jca.GetInstance;
 import vos.Abonamiento;
 import vos.Boleta;
+import vos.BoletasCompradas;
 import vos.Cliente;
 import vos.Compania;
 import vos.Espectaculo;
@@ -673,6 +674,36 @@ public class DAOTablaFestival {
 		return usuarios;
 	}
 
+//	public ArrayList<BoletasCompradas> consultaBoletasFecha(String fechaInicial, String fechaFinal) throws SQLException 
+//	{	
+//		ArrayList<BoletasCompradas> boletasCompradas = new ArrayList<>();
+//		String sql = "with tabla1 as (select sillas.ID_SILLA "
+//				+" sillas.NUMERO as numeroSilla, "
+//				+" ID_LOCALIDAD, "
+//				+" localidad.NOMBRE as nombreLocalidad, "
+//				+" localidad.CAPACIDAD, "
+//				+" localidad.ID_SITIO as idSitio ,"
+//				+" localidad.PRECIO, "
+//				+" localidad.SILLA_NUMERADA from sillas natural join localidad), "
+//				+" tabla2 as (select * from boleta natural join funcion), "
+//				+" tabla3 as (select *from tabla1 inner join tabla2 on tabla1.id_silla = tabla2.id_silla), "
+//				+" tabla4 as (select distinct * from tabla3 inner join espectaculo on tabla3.id_espectaculo = espectaculo.id_espec), "
+//				+" tabla5 as (select * from tabla4 inner join requerimientoespectaculo on tabla4.id_espec = requerimientoespectaculo.ID_ESPECTACULO) "
+//				+" select * from tabla5 inner join REQUERIMIENTOS on REQUERIMIENTOS.ID_REQ = tabla5.id_requerimiento where fecha between '"+ fechaInicial +"' and '" + fechaFinal + "'";
+//		System.out.println("SQL stmt:  " + sql);
+//		PreparedStatement prepStmt = conn.prepareStatement(sql);
+//		recursos.add(prepStmt);
+//		ResultSet rs = prepStmt.executeQuery();
+//		while(rs.next())
+//		{
+//			Long id_boleta = Long.parseLong(rs.getString("id_boleta"));
+//			Long id_localidad = Long.parseLong(rs.getString("id_localidad"));
+//			int numeroSilla = Integer.parseInt(rs.getString("NUMEROSILLA"));
+//			
+//			//BoletasCompradas boletaCompra = new 
+//		}
+//
+//	}
 
 	
 

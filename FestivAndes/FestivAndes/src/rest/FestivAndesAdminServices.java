@@ -403,9 +403,6 @@ public class FestivAndesAdminServices {
 				return Response.status(500).entity(doErrorMessage("Ocurrio un problema")).build();
 			}
 		} 
-
-
-
 		catch(Exception e)
 		{
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -417,7 +414,7 @@ public class FestivAndesAdminServices {
 	@Path("/buenosClientes/{numBoletas}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response informeNoAsistencia(@PathParam("numboletas") Long numBoletas)
+	public Response buenosClientes(@PathParam("numboletas") Long numBoletas)
 	{
 		System.out.println(numBoletas);
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
@@ -430,4 +427,19 @@ public class FestivAndesAdminServices {
 		return Response.status(200).entity(lista).build();
 	}
 
+//	@GET
+//	@Path("/consultaBoletas/fecha/{fechaInicial}/{fechaFinal}")
+//	@Produces({ MediaType.APPLICATION_JSON })
+//	public Response consultaBoletasFecha(@javax.ws.rs.PathParam("fechaInicial")String fechaInicial, @javax.ws.rs.PathParam("fechaFinal")String fechaFinal) {
+//		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+//		
+//		try {
+//		tm.consultaBoletasFecha(fechaInicial, fechaFinal);
+//
+//		} catch (Exception e) {
+//			return Response.status(500).entity(doErrorMessage(e)).build();
+//		}
+//		return Response.status(200).entity(reporte).build();
+//	}
+	
 }
