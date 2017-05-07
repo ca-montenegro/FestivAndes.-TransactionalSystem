@@ -414,7 +414,7 @@ public class FestivAndesAdminServices {
 	@Path("/buenosClientes/{numBoletas}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response buenosClientes(@PathParam("numboletas") Long numBoletas)
+	public Response buenosClientes(@PathParam("numBoletas") Long numBoletas)
 	{
 		System.out.println(numBoletas);
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());

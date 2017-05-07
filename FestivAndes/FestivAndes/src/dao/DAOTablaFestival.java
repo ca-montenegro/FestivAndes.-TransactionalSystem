@@ -658,13 +658,20 @@ public class DAOTablaFestival {
 	{
 		ArrayList<Usuario> usuarios = new ArrayList<>();
 		String numBol = String.valueOf(numBoletas);
-		String sql = "";
+		String sql = "with tabla1 as (select id_boleta, id_silla, id_cliente, id_localidad from ((select * from ISIS2304A241720.boleta)"
+					 +" natural join (select * from ISIS2304A241720.sillas))),"
+					 +" tabla2 as (select id_boleta, id_cliente, nombre from (tabla1 natural join ISIS2304A241720.localidad)),"
+					 +" tabla3 as(select id_boleta, id_cliente, nombre from tabla2 where nombre != 'VIP'),"
+					 +" tabla4 as(select id_cliente from tabla2 minus select id_cliente from tabla3),"
+					 +" tabla5 as(select * from tabla4 natural join tabla2),"
+					 +" tabla6 as (select distinct id_cliente, count(*) as cantidad from tabla5 group by id_cliente)"
+					 +" select * from ( (select id_cliente as id_user from tabla6 where cantidad >= " + numBol + ") natural join ISIS2304A241720.usuario)";
 		System.out.println("SQL stmt: " + sql);
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		ResultSet rs = prepStmt.executeQuery();
 		while(rs.next())
 		{
-			Long idUsuario = Long.parseLong(rs.getString("ID_CLIENTE"));
+			Long idUsuario = Long.parseLong(rs.getString("ID_USER"));
 			String nombre = rs.getString("NOMBRE_USER");
 			String correo = rs.getString("CORREO_USER");
 			Long rol = Long.parseLong(rs.getString("ROL_USER"));
