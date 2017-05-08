@@ -21,6 +21,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import tm.FestivAndesMaster;
 import vos.Abonamiento;
+import vos.BoletasCompradas;
 import vos.Compania;
 import vos.Espectaculo;
 import vos.Funcion;
@@ -427,19 +428,19 @@ public class FestivAndesAdminServices {
 		return Response.status(200).entity(lista).build();
 	}
 
-//	@GET
-//	@Path("/consultaBoletas/fecha/{fechaInicial}/{fechaFinal}")
-//	@Produces({ MediaType.APPLICATION_JSON })
-//	public Response consultaBoletasFecha(@javax.ws.rs.PathParam("fechaInicial")String fechaInicial, @javax.ws.rs.PathParam("fechaFinal")String fechaFinal) {
-//		FestivAndesMaster tm = new FestivAndesMaster(getPath());
-//		
-//		try {
-//		tm.consultaBoletasFecha(fechaInicial, fechaFinal);
-//
-//		} catch (Exception e) {
-//			return Response.status(500).entity(doErrorMessage(e)).build();
-//		}
-//		return Response.status(200).entity(reporte).build();
-//	}
+	@PUT
+	@Path("/consultaBoletas/fecha")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response consultaBoletasFecha(Abonamiento fechas) {
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		ArrayList<BoletasCompradas> boletas = null;
+		try {
+		boletas = tm.consultaBoletasFecha(fechas.getFechaConsulta(), fechas.getFechaFinal());
+
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).type("text/plain").entity(boletas.toString()).build();
+	}
 	
 }

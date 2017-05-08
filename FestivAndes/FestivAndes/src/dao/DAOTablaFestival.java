@@ -681,36 +681,62 @@ public class DAOTablaFestival {
 		return usuarios;
 	}
 
-//	public ArrayList<BoletasCompradas> consultaBoletasFecha(String fechaInicial, String fechaFinal) throws SQLException 
-//	{	
-//		ArrayList<BoletasCompradas> boletasCompradas = new ArrayList<>();
-//		String sql = "with tabla1 as (select sillas.ID_SILLA "
-//				+" sillas.NUMERO as numeroSilla, "
-//				+" ID_LOCALIDAD, "
-//				+" localidad.NOMBRE as nombreLocalidad, "
-//				+" localidad.CAPACIDAD, "
-//				+" localidad.ID_SITIO as idSitio ,"
-//				+" localidad.PRECIO, "
-//				+" localidad.SILLA_NUMERADA from sillas natural join localidad), "
-//				+" tabla2 as (select * from boleta natural join funcion), "
-//				+" tabla3 as (select *from tabla1 inner join tabla2 on tabla1.id_silla = tabla2.id_silla), "
-//				+" tabla4 as (select distinct * from tabla3 inner join espectaculo on tabla3.id_espectaculo = espectaculo.id_espec), "
-//				+" tabla5 as (select * from tabla4 inner join requerimientoespectaculo on tabla4.id_espec = requerimientoespectaculo.ID_ESPECTACULO) "
-//				+" select * from tabla5 inner join REQUERIMIENTOS on REQUERIMIENTOS.ID_REQ = tabla5.id_requerimiento where fecha between '"+ fechaInicial +"' and '" + fechaFinal + "'";
-//		System.out.println("SQL stmt:  " + sql);
-//		PreparedStatement prepStmt = conn.prepareStatement(sql);
-//		recursos.add(prepStmt);
-//		ResultSet rs = prepStmt.executeQuery();
-//		while(rs.next())
-//		{
-//			Long id_boleta = Long.parseLong(rs.getString("id_boleta"));
-//			Long id_localidad = Long.parseLong(rs.getString("id_localidad"));
-//			int numeroSilla = Integer.parseInt(rs.getString("NUMEROSILLA"));
-//			
-//			//BoletasCompradas boletaCompra = new 
-//		}
-//
-//	}
+	public ArrayList<BoletasCompradas> consultaBoletasFecha(String fechaInicial, String fechaFinal) throws SQLException 
+	{	
+		ArrayList<BoletasCompradas> boletasCompradas = new ArrayList<>();
+		String sql = "with tabla1 as (select sillas.ID_SILLA, "
+				+" sillas.NUMERO as numeroSilla, "
+				+" ID_LOCALIDAD, "
+				+" localidad.NOMBRE as nombreLocalidad, "
+				+" localidad.CAPACIDAD, "
+				+" localidad.ID_SITIO as idSitio ,"
+				+" localidad.PRECIO, "
+				+" localidad.SILLA_NUMERADA from sillas natural join localidad), "
+				+" tabla2 as (select * from boleta natural join funcion), "
+				+" tabla3 as (select *from tabla1 inner join tabla2 on tabla1.id_silla = tabla2.id_silla), "
+				+" tabla4 as (select distinct * from tabla3 inner join espectaculo on tabla3.id_espectaculo = espectaculo.id_espec), "
+				+" tabla5 as (select * from tabla4 inner join requerimientoespectaculo on tabla4.id_espec = requerimientoespectaculo.ID_ESPECTACULO) "
+				+" select * from tabla5 inner join REQUERIMIENTOS on REQUERIMIENTOS.ID_REQ = tabla5.id_requerimiento where fecha between '"+ fechaInicial +"' and '" + fechaFinal + "'";
+		System.out.println("SQL stmt:  " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long id_boleta = Long.parseLong(rs.getString("id_boleta"));
+			Long id_localidad = Long.parseLong(rs.getString("id_localidad"));
+			int numeroSilla = Integer.parseInt(rs.getString("NUMEROSILLA"));
+			String nombreLocalidad = rs.getString("nombreLocalidad");
+			Long idSitio = Long.parseLong(rs.getString("idSitio"));
+			double precio = Double.parseDouble(rs.getString("PRECIO"));
+			char silla_numerada = (rs.getString("SILLA_NUMERADA")).charAt(0);
+			Long id_funcion = Long.parseLong(rs.getString("ID_FUNCION"));
+			Long id_cliente = Long.parseLong(rs.getString("ID_CLIENTE"));
+			Long id_abonamiento = Long.parseLong(rs.getString("ID_ABONAMIENTO"));
+			char estado = (rs.getString("ESTADO")).charAt(0);
+			String fecha = rs.getString("FECHA");
+			int hora = Integer.parseInt(rs.getString("HORA"));
+			char realizada = (rs.getString("REALIZADA")).charAt(0);
+			Long id_espec = Long.parseLong(rs.getString("ID_ESPEC"));
+			String nombre = rs.getString("NOMBRE");
+			double duracion = Double.parseDouble(rs.getString("DURACION"));
+			String idioma = rs.getString("IDIOMA");
+			double costo =  Double.parseDouble(rs.getString("COSTO"));
+			String descripcion = rs.getString("DESCRIPCION");
+			char servicio_tradu = (rs.getString("SERVICIO_TRADU")).charAt(0);
+			String publico_objetivo = rs.getString("PUBLICO_OBJETIVO");
+			Long id_compania = Long.parseLong(rs.getString("ID_COMPANIA"));
+			Long id_operario = Long.parseLong(rs.getString("ID_OPERARIO"));
+			Long id_req = Long.parseLong(rs.getString("ID_REQ"));
+//			String descripcion_1 = rs.getString("descripcion_1");
+			String descripcion_1 = "";
+			BoletasCompradas boletaCompra = new BoletasCompradas(id_boleta, id_localidad, numeroSilla, nombreLocalidad, idSitio, precio, silla_numerada, id_funcion, id_cliente, id_abonamiento, estado, fecha, hora, realizada, id_espec, nombre, duracion, idioma, costo, descripcion, servicio_tradu, publico_objetivo, id_compania, id_operario, id_req, descripcion_1); 
+			boletasCompradas.add(boletaCompra);
+		}
+		
+		return boletasCompradas;
+		
+	}
 
 	
 

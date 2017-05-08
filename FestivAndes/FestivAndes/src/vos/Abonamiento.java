@@ -15,6 +15,9 @@ public class Abonamiento {
 	@JsonProperty(value="fechaConsulta")
 	private String fechaConsulta;
 	
+	@JsonProperty(value="fechaFinal")
+	private String fechaFinal;
+	
 	private ArrayList<Boleta> abonamientoList;
 
 
@@ -64,6 +67,28 @@ public class Abonamiento {
 		this.abonamientoList = abonamientoList;
 	}
 	
+	
+	
+	public ArrayList<String> getLocalidades() {
+		return localidades;
+	}
+
+
+	public void setLocalidades(ArrayList<String> localidades) {
+		this.localidades = localidades;
+	}
+
+
+	public String getFechaFinal() {
+		return fechaFinal;
+	}
+
+
+	public void setFechaFinal(String fechaFinal) {
+		this.fechaFinal = fechaFinal;
+	}
+
+
 	public String toString(){
 		
 		return "";

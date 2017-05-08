@@ -295,7 +295,13 @@ public class BoletasCompradas {
 		this.descripcion_1 = descripcion_1;
 	}
 	
-	
+	public String toString()
+	{
+		return "idBoleta: " + id_boleta+"\n"
+				+ "id_Localidad: " + id_localidad +"\n"
+						+ "numeroSilla: " + numerosilla;
+		
+	}
 	
 	
 }

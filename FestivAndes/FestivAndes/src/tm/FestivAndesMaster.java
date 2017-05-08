@@ -1620,37 +1620,37 @@ public class FestivAndesMaster {
 		return new ListaBuenosClientes(numBoletas, resp);
 	}
 
-//	public BoletasCompradas consultaBoletasFecha(String fechaInicial, String fechaFinal) throws SQLException {
-//		DAOTablaFestival daoFestival = new DAOTablaFestival();
-//		BoletasCompradas boletasCompradas;
-//		try 
-//		{
-//			//////Transacción
-//			this.conn = darConexion();
-//			daoFestival.setConn(conn);
-//			boletasCompradas = daoFestival.consultaBoletasFecha(fechaInicial, fechaFinal);
-//			conn.commit();
-//
-//		} catch (SQLException e) {
-//			System.err.println("SQLException:" + e.getMessage());
-//			e.printStackTrace();
-//			throw e;
-//		} catch (Exception e) {
-//			System.err.println("GeneralException:" + e.getMessage());
-//			e.printStackTrace();
-//			throw e;
-//		} finally {
-//			try {
-//				daoFestival.cerrarRecursos();
-//				if(this.conn!=null)
-//					this.conn.close();
-//			} catch (SQLException exception) {
-//				System.err.println("SQLException closing resources:" + exception.getMessage());
-//				exception.printStackTrace();
-//				throw exception;
-//			}
-//		}
-//		return boletasCompradas;
-//	}
+	public ArrayList<BoletasCompradas> consultaBoletasFecha(String fechaInicial, String fechaFinal) throws SQLException {
+		DAOTablaFestival daoFestival = new DAOTablaFestival();
+		ArrayList<BoletasCompradas> boletasCompradas;
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			daoFestival.setConn(conn);
+			boletasCompradas = daoFestival.consultaBoletasFecha(fechaInicial, fechaFinal);
+			conn.commit();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoFestival.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return boletasCompradas;
+	}
 
 }
