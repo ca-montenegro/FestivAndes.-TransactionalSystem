@@ -41,7 +41,7 @@ import vos.ListaRentabilidad;
 import vos.ListaRespuestaAsistencia;
 import vos.ListaUsuarios;
 import vos.ReporteSitio;
-
+import vos.Requerimiento;
 import vos.Sitio;
 import vos.Usuario;
 
@@ -443,4 +443,49 @@ public class FestivAndesAdminServices {
 		return Response.status(200).type("text/plain").entity(boletas.toString()).build();
 	}
 	
+	@GET
+	@Path("/consultaBoletas/requerimiento/{idReq}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response consultaBoletasRequerimiento(@PathParam("idReq") Long idReq) {
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		ArrayList<BoletasCompradas> boletas = null;
+		try {
+		boletas = tm.consultaBoletasRequerimiento(idReq);
+
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).type("text/plain").entity(boletas.toString()).build();
+	}
+	
+	@GET
+	@Path("/consultaBoletas/localidad/{nomLocal}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response consultaBoletasLocalidad(@PathParam("nomLocal") String nomLocal) {
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		ArrayList<BoletasCompradas> boletas = null;
+		try {
+		boletas = tm.consultaBoletasLocalidad(nomLocal);
+
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).type("text/plain").entity(boletas.toString()).build();
+	}
+	
+	@GET
+	@Path("/consultaBoletas/franjahoraria/{ini}/{fin}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response consultaBoletasFecha(@PathParam("ini") int ini,@PathParam("fin") int fin ) {
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		ArrayList<BoletasCompradas> boletas = null;
+		try {
+		boletas = tm.consultaBoletasFranjaHoraria(ini, fin);
+
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).type("text/plain").entity(boletas.toString()).build();
+	}
 }
+

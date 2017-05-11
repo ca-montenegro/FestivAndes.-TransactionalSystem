@@ -297,9 +297,12 @@ public class BoletasCompradas {
 	
 	public String toString()
 	{
-		return "idBoleta: " + id_boleta+"\n"
-				+ "id_Localidad: " + id_localidad +"\n"
-						+ "numeroSilla: " + numerosilla;
+		return "nombre: " + nombre + ". "
+				+ "fecha funcion: " + fecha+ ". "
+						+ "sitio función: " + idSitio +". "
+								+ "franja horaria: " + hora + ". "
+										+ "localidad: " + nombreLocalidad + ". "
+								+ "conteo: " + id_espec + ". \n";
 		
 	}
 	
