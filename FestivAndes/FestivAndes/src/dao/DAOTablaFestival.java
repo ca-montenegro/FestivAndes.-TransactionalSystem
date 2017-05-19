@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Queue;
-
-import com.sun.javafx.collections.ArrayListenerHelper;
-
-import sun.security.jca.GetInstance;
 import vos.Abonamiento;
 import vos.Boleta;
 import vos.BoletasCompradas;

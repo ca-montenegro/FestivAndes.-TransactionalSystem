@@ -20,6 +20,7 @@ import dao.DAOTablaPreferencia;
 import dao.DAOTablaSilla;
 import dao.DAOTablaSitio;
 import dao.DAOTablaUsuario;
+import dtm.FestivAndesDistributed;
 import vos.Abonamiento;
 import vos.Boleta;
 import vos.BoletasCompradas;
@@ -90,7 +91,8 @@ public class FestivAndesMaster {
 	 * Conexión a la base de datos
 	 */
 	private Connection conn;
-
+	
+	private FestivAndesDistributed dtm;
 
 	/**
 	 * Método constructor de la clase VideoAndesMaster, esta clase modela y contiene cada una de las 
@@ -102,6 +104,9 @@ public class FestivAndesMaster {
 	public FestivAndesMaster(String contextPathP) {
 		connectionDataPath = contextPathP + CONNECTION_DATA_FILE_NAME_REMOTE;
 		initConnectionData();
+		System.out.println("Instancing DTM...");
+		dtm = FestivAndesDistributed.getInstance(this);
+		System.out.println("Done!");
 	}
 
 	public void commit() throws SQLException
