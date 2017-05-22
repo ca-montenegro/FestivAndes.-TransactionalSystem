@@ -20,6 +20,7 @@ import vos.FuncionRespuestaCliente;
 import vos.InformacionFuncionSitio;
 import vos.InformacionVentaFuncion;
 import vos.InformacionVentaLocalidad;
+import vos.ListaFuncionesEspectaculos;
 import vos.Localidad;
 import vos.MasPopuEspectaculo;
 import vos.NotaDebito;
@@ -902,8 +903,164 @@ public class DAOTablaFestival {
 		return boletasCompradas;
 	}
 
+	public ArrayList<ListaFuncionesEspectaculos> consultaFuncioneEspectaculoFecha(String fechaInicial, String fechaFinal) throws SQLException
+	{
+		ArrayList<Long> idsEspectaculos = new ArrayList<>();
 	
+		String sql = "select distinct id_espectaculo from ISIS2304A241720.funcion where fecha between" + fechaInicial + " and "+ fechaFinal;
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idEspectaculo = Long.parseLong(rs.getString("ID_ESPECTACULO"));
+			idsEspectaculos.add(idEspectaculo);	
+		}
+		
+		ArrayList<ListaFuncionesEspectaculos> listaFunciones = new ArrayList<>();
+		
+		for(int i = 0; i<idsEspectaculos.size(); i++)
+		{
+			String idActual = String.valueOf(idsEspectaculos.get(i));
+			String sql2 = "select * from ISIS2304A241720.funcion where fecha between "+ fechaInicial + " and "+ fechaFinal +" and id_Espectaculo = "+ idActual;
+			System.out.println("SQL stmt: " + sql2);
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			ArrayList<Funcion> funcionesEspectaculo = new ArrayList<>();
+			while(rs2.next())
+			{
+				Long idFuncion = Long.parseLong(rs2.getString("ID_FUNCION"));
+				String fecha = rs2.getString("FECHA");
+				Long idSitio = Long.parseLong(rs2.getString("ID_SITIO"));
+				int hora = Integer.parseInt(rs2.getString("HORA"));
+				char realizada = rs2.getString("REALIZADA").charAt(0);
+				Funcion nueva = new Funcion(idFuncion, fecha, idSitio, hora, realizada);
+				funcionesEspectaculo.add(nueva);
+			}
+			ListaFuncionesEspectaculos lista = new ListaFuncionesEspectaculos(Long.parseLong(idActual), funcionesEspectaculo);
+			listaFunciones.add(lista);
+		}
+		return listaFunciones;
+	}
 
-
+	public ArrayList<ListaFuncionesEspectaculos> consultaFuncioneEspectaculoCompania(String idCompania) throws SQLException
+	{
+		ArrayList<Long> idsEspectaculos = new ArrayList<>();
+	
+		String sql = "select distinct id_espectaculo from ISIS2304A241720.funcion natural join ISIS2304A241720.espectaculo where id_compania = " + idCompania;
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idEspectaculo = Long.parseLong(rs.getString("ID_ESPECTACULO"));
+			idsEspectaculos.add(idEspectaculo);	
+		}
+		
+		ArrayList<ListaFuncionesEspectaculos> listaFunciones = new ArrayList<>();
+		
+		for(int i = 0; i<idsEspectaculos.size(); i++)
+		{
+			String idActual = String.valueOf(idsEspectaculos.get(i));
+			String sql2 = "select id_funcion, fecha, id_sitio, id_espectaculo, hora, realizada, id_compania from ISIS2304A241720.funcion natural join ISIS2304A241720.espectaculo where id_compania = "+idCompania +" and id_espectaculo = " + idActual;
+			System.out.println("SQL stmt: " + sql2);
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			ArrayList<Funcion> funcionesEspectaculo = new ArrayList<>();
+			while(rs2.next())
+			{
+				Long idFuncion = Long.parseLong(rs2.getString("ID_FUNCION"));
+				String fecha = rs2.getString("FECHA");
+				Long idSitio = Long.parseLong(rs2.getString("ID_SITIO"));
+				int hora = Integer.parseInt(rs2.getString("HORA"));
+				char realizada = rs2.getString("REALIZADA").charAt(0);
+				Funcion nueva = new Funcion(idFuncion, fecha, idSitio, hora, realizada);
+				funcionesEspectaculo.add(nueva);
+			}
+			ListaFuncionesEspectaculos lista = new ListaFuncionesEspectaculos(Long.parseLong(idActual), funcionesEspectaculo);
+			listaFunciones.add(lista);
+		}
+		return listaFunciones;
+	}
+	
+	public ArrayList<ListaFuncionesEspectaculos> consultaFuncioneEspectaculoCategoria(String categoria) throws SQLException
+	{
+		ArrayList<Long> idsEspectaculos = new ArrayList<>();
+	
+		String sql = "select distinct id_espectaculo from ISIS2304A241720.funcion natural join ISIS2304A241720.espectaculocategoria where id_categoria = " + categoria;
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idEspectaculo = Long.parseLong(rs.getString("ID_ESPECTACULO"));
+			idsEspectaculos.add(idEspectaculo);	
+		}
+		
+		ArrayList<ListaFuncionesEspectaculos> listaFunciones = new ArrayList<>();
+		
+		for(int i = 0; i<idsEspectaculos.size(); i++)
+		{
+			String idActual = String.valueOf(idsEspectaculos.get(i));
+			String sql2 = "select id_funcion, fecha, id_sitio, id_espectaculo, hora, realizada, id_categoria from ISIS2304A241720.funcion natural join ISIS2304A241720.espectaculocategoria where id_categoria = "+ categoria + " and id_espectaculo = "+ idActual;
+			System.out.println("SQL stmt: " + sql2);
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			ArrayList<Funcion> funcionesEspectaculo = new ArrayList<>();
+			while(rs2.next())
+			{
+				Long idFuncion = Long.parseLong(rs2.getString("ID_FUNCION"));
+				String fecha = rs2.getString("FECHA");
+				Long idSitio = Long.parseLong(rs2.getString("ID_SITIO"));
+				int hora = Integer.parseInt(rs2.getString("HORA"));
+				char realizada = rs2.getString("REALIZADA").charAt(0);
+				Funcion nueva = new Funcion(idFuncion, fecha, idSitio, hora, realizada);
+				funcionesEspectaculo.add(nueva);
+			}
+			ListaFuncionesEspectaculos lista = new ListaFuncionesEspectaculos(Long.parseLong(idActual), funcionesEspectaculo);
+			listaFunciones.add(lista);
+		}
+		return listaFunciones;
+	}
+	
+	public ArrayList<ListaFuncionesEspectaculos> consultaFuncioneEspectaculoIdioma(String idioma) throws SQLException
+	{
+		ArrayList<Long> idsEspectaculos = new ArrayList<>();
+	
+		String sql = "select distinct id_espectaculo from ISIS2304A241720.funcion natural join ISIS2304A241720.espectaculo where idioma = '"+ idioma +"'";
+		System.out.println("SQL stmt: " + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next())
+		{
+			Long idEspectaculo = Long.parseLong(rs.getString("ID_ESPECTACULO"));
+			idsEspectaculos.add(idEspectaculo);	
+		}
+		
+		ArrayList<ListaFuncionesEspectaculos> listaFunciones = new ArrayList<>();
+		
+		for(int i = 0; i<idsEspectaculos.size(); i++)
+		{
+			String idActual = String.valueOf(idsEspectaculos.get(i));
+			String sql2 = "select id_funcion, fecha, id_sitio, id_espectaculo, hora, realizada, idioma from ISIS2304A241720.funcion natural join ISIS2304A241720.espectaculo where idioma = '" + idioma + "' and id_espectaculo = "+ idActual ;
+			System.out.println("SQL stmt: " + sql2);
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			ArrayList<Funcion> funcionesEspectaculo = new ArrayList<>();
+			while(rs2.next())
+			{
+				Long idFuncion = Long.parseLong(rs2.getString("ID_FUNCION"));
+				String fecha = rs2.getString("FECHA");
+				Long idSitio = Long.parseLong(rs2.getString("ID_SITIO"));
+				int hora = Integer.parseInt(rs2.getString("HORA"));
+				char realizada = rs2.getString("REALIZADA").charAt(0);
+				Funcion nueva = new Funcion(idFuncion, fecha, idSitio, hora, realizada);
+				funcionesEspectaculo.add(nueva);
+			}
+			ListaFuncionesEspectaculos lista = new ListaFuncionesEspectaculos(Long.parseLong(idActual), funcionesEspectaculo);
+			listaFunciones.add(lista);
+		}
+		return listaFunciones;
+	}
 }
 
