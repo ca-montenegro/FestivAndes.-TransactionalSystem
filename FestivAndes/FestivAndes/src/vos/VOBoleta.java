@@ -6,7 +6,7 @@ package vos;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-public class Boleta {
+public class VOBoleta {
 	
 	/**
 	 * Identificacion de la boleta
@@ -65,7 +65,7 @@ public class Boleta {
 	 * @param silla silla asignada a la boleta  silla != null
 	 * @param cliente cliente que compra la boleta
 	 */
-	public Boleta(@JsonProperty(value="id") Long id, @JsonProperty(value="idFuncion")Long idFuncion, 
+	public VOBoleta(@JsonProperty(value="id") Long id, @JsonProperty(value="idFuncion")Long idFuncion, 
 			@JsonProperty(value="idSilla")Long idSilla,@JsonProperty(value="cantidad") int cantidad,
 			@JsonProperty(value="estado") char estado)
 	{

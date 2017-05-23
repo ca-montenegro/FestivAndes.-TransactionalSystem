@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-public class Abonamiento {
+public class VOAbonamiento {
 
 	@JsonProperty(value="idsFunciones")
 	private ArrayList<Long> idsFunciones;
@@ -18,11 +18,17 @@ public class Abonamiento {
 	@JsonProperty(value="fechaFinal")
 	private String fechaFinal;
 	
-	private ArrayList<Boleta> abonamientoList;
+	@JsonProperty(value="idUsuario")
+	private Long idUsuario;
+	
+	
+
+
+	private ArrayList<VOBoleta> abonamientoList;
 
 
 
-	public Abonamiento(@JsonProperty(value="idsFunciones") ArrayList<Long> idsFunciones,
+	public VOAbonamiento(@JsonProperty(value="idsFunciones") ArrayList<Long> idsFunciones,
 			@JsonProperty(value="idsLocalidades") ArrayList<String> localidades, 
 			@JsonProperty(value="fechaConsulta") String fechaConsulta) {
 		this.idsFunciones = idsFunciones;
@@ -31,6 +37,14 @@ public class Abonamiento {
 		
 	}
 	
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+
+
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
 
 	public ArrayList<Long> getIdsFunciones() {
 		return idsFunciones;
@@ -58,12 +72,12 @@ public class Abonamiento {
 		this.fechaConsulta = fechaConsulta;
 	}
 	
-	public ArrayList<Boleta> getAbonamientoList() {
+	public ArrayList<VOBoleta> getAbonamientoList() {
 		return abonamientoList;
 	}
 
 
-	public void setAbonamientoList(ArrayList<Boleta> abonamientoList) {
+	public void setAbonamientoList(ArrayList<VOBoleta> abonamientoList) {
 		this.abonamientoList = abonamientoList;
 	}
 	

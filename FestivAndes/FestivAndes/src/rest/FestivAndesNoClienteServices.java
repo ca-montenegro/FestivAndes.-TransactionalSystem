@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tm.FestivAndesMaster;
-import vos.Boleta;
+import vos.VOBoleta;
 
 /**
  * Clase que expone servicios REST con ruta base: http://"ip o nombre de host":8080/FestivAndes/rest/noCliente/...
@@ -55,9 +55,9 @@ public class FestivAndesNoClienteServices {
 	@Path("/boleta")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addBoleta(Boleta boleta) {
+	public Response addBoleta(VOBoleta boleta) {
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
-		Boleta bole = null;
+		VOBoleta bole = null;
 		try {
 			bole  = tm.venderBoleta(boleta.getIdFuncion(), boleta.getIdSilla(), null,(long)0);
 			//System.out.println(" numero: " + bole.getSilla().getNumero() + 

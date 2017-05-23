@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Queue;
-import vos.Abonamiento;
-import vos.Boleta;
+import vos.VOAbonamiento;
+import vos.VOBoleta;
 import vos.BoletasCompradas;
 import vos.Cliente;
 import vos.Compania;
@@ -513,7 +513,7 @@ public class DAOTablaFestival {
 		DAOTablaBoleta daoBoleta = new DAOTablaBoleta();
 		daoBoleta.setConn(conn);
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		Boleta boleta = daoBoleta.buscarBoleta(idBoleta);
+		VOBoleta boleta = daoBoleta.buscarBoleta(idBoleta);
 		if(boleta==null)
 			throw new SQLException("La boleta con el id: " + idBoleta+ "no se encuentra en el sistema");
 		if(!boleta.getIdCliente().equals(idUsuario))
@@ -570,7 +570,7 @@ public class DAOTablaFestival {
 		return (long)0;
 	}
 
-	public ArrayList<Long> verificarSitioLocalidad(Abonamiento abonamiento) throws SQLException
+	public ArrayList<Long> verificarSitioLocalidad(VOAbonamiento abonamiento) throws SQLException
 	{
 		ArrayList<Long> funciones =abonamiento.getIdsFunciones();
 		ArrayList<String> localidades = abonamiento.getIdsLocalidades();

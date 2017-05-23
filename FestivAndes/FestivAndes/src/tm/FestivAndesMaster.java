@@ -21,8 +21,9 @@ import dao.DAOTablaSilla;
 import dao.DAOTablaSitio;
 import dao.DAOTablaUsuario;
 import dtm.FestivAndesDistributed;
-import vos.Abonamiento;
-import vos.Boleta;
+import jms.NonReplyException;
+import vos.VOAbonamiento;
+import vos.VOBoleta;
 import vos.BoletasCompradas;
 import vos.Compania;
 import vos.Espectaculo;
@@ -755,9 +756,9 @@ public class FestivAndesMaster {
 	}
 
 
-	public Boleta inicVenderBoleta(Long idFuncion, Long idSilla, Long idCliente, Long idAbonamiento) throws Exception {
+	public VOBoleta inicVenderBoleta(Long idFuncion, Long idSilla, Long idCliente, Long idAbonamiento) throws Exception {
 
-		Boleta boleta = null;
+		VOBoleta boleta = null;
 		try{
 
 			this.conn = darConexion();
@@ -788,9 +789,9 @@ public class FestivAndesMaster {
 
 	}
 
-	public Boleta venderBoleta(Long idFuncion, Long	 idSilla, Long idCliente, Long idAbonamiento) throws Exception {
+	public VOBoleta venderBoleta(Long idFuncion, Long	 idSilla, Long idCliente, Long idAbonamiento) throws Exception {
 		DAOTablaBoleta daoFestival = new DAOTablaBoleta();
-		Boleta boleta = null;
+		VOBoleta boleta = null;
 		try 
 		{
 			//////Transacción
@@ -821,9 +822,9 @@ public class FestivAndesMaster {
 		return boleta;
 	}
 
-	public Boleta verificarLocalidadSillas( Long idSilla, int cantidad) throws Exception {
+	public VOBoleta verificarLocalidadSillas( Long idSilla, int cantidad) throws Exception {
 		DAOTablaSilla daoFestival = new DAOTablaSilla();
-		Boleta boleta = null;
+		VOBoleta boleta = null;
 		try 
 		{
 			//////Transacción
@@ -863,9 +864,9 @@ public class FestivAndesMaster {
 		}
 		return boleta;
 	}
-	public ArrayList<Boleta> venderMultiplesBoleta(Long idFuncion, Long idSilla, Long idCliente, int cantidad) throws Exception {
+	public ArrayList<VOBoleta> venderMultiplesBoleta(Long idFuncion, Long idSilla, Long idCliente, int cantidad) throws Exception {
 		DAOTablaFestival daoFestival = new DAOTablaFestival();
-		ArrayList<Boleta> listaBoleta = new ArrayList<>();
+		ArrayList<VOBoleta> listaBoleta = new ArrayList<>();
 		try 
 		{
 			//////Transacción
@@ -905,10 +906,10 @@ public class FestivAndesMaster {
 		return listaBoleta;
 	}
 
-	public Boleta venderBoletasVarias(Long idFuncion, Long idSilla, Long idCliente) throws SQLException
+	public VOBoleta venderBoletasVarias(Long idFuncion, Long idSilla, Long idCliente) throws SQLException
 	{
 		DAOTablaBoleta daoFestival = new DAOTablaBoleta();
-		Boleta boleta = null;
+		VOBoleta boleta = null;
 		try 
 		{
 			//////Transacción
@@ -1286,10 +1287,10 @@ public class FestivAndesMaster {
 
 	}
 
-	public ArrayList<Boleta> crearAbonamiento(Long idUsuario, Abonamiento abonamiento) {
+	public ArrayList<VOBoleta> crearAbonamiento(Long idUsuario, VOAbonamiento abonamiento) {
 		// TODO Auto-generated method stub
 		DAOTablaFestival daoFestival = new DAOTablaFestival();
-		ArrayList<Boleta> abonamientoList = new ArrayList<>();
+		ArrayList<VOBoleta> abonamientoList = new ArrayList<>();
 		try 
 		{
 			//////Transacción
@@ -1305,7 +1306,7 @@ public class FestivAndesMaster {
 			ArrayList<Long> idFunciones = abonamiento.getIdsFunciones();
 			int i = 0;
 			for(Long idSillas: daoFestival.verificarSitioLocalidad(abonamiento)){
-				Boleta boleta = venderBoleta(idFunciones.get(i), idSillas, idUsuario, idAbonamiento);
+				VOBoleta boleta = venderBoleta(idFunciones.get(i), idSillas, idUsuario, idAbonamiento);
 				boleta.setPrecio((int)(boleta.getPrecio()*0.8));
 				boleta.setIdAbonamiento(idAbonamiento);
 				abonamientoList.add(boleta);
@@ -1758,6 +1759,17 @@ public class FestivAndesMaster {
 			}
 		}
 		return boletasCompradas;
+	}
+
+	public ArrayList<VOBoleta> crearAbonamientoGlobal(Long idUsuario, VOAbonamiento abonamiento) throws NonReplyException {
+		// TODO Auto-generated method stub
+		//LOCAL
+		ArrayList<VOBoleta> abonamientos = crearAbonamiento(idUsuario, abonamiento);
+		abonamiento.setIdUsuario(idUsuario);
+		//GLOBAL
+		ArrayList<VOBoleta> abonamientosGlobal = dtm.getAbonamientosGlobal(abonamiento);
+		abonamientos.addAll(abonamientosGlobal);
+		return abonamientos;
 	}
 
 }

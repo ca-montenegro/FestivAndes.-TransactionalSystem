@@ -20,8 +20,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 //import oracle.sql.DATE;
 import tm.FestivAndesMaster;
-import vos.Abonamiento;
-import vos.Boleta;
+import vos.VOAbonamiento;
+import vos.VOBoleta;
 import vos.ListaFuncionesCompania;
 import vos.ListaInformacion;
 import vos.ListaRespuestaAsistencia;
@@ -123,9 +123,9 @@ public class FestivAndesClienteServices {
 	@Path("/boleta")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addBoleta(Boleta boleta, @javax.ws.rs.PathParam("id")Long id) {
+	public Response addBoleta(VOBoleta boleta, @javax.ws.rs.PathParam("id")Long id) {
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
-		Boleta bole = null;
+		VOBoleta bole = null;
 		try {
 			bole  = tm.venderBoleta(boleta.getIdFuncion(), boleta.getIdSilla(), id,(long) 0);
 			//System.out.println(" numero: " + bole.getSilla().getNumero() + 
@@ -146,10 +146,10 @@ public class FestivAndesClienteServices {
 	@Path("/boleta/multiples")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addMultiplesBoletas(Boleta boleta, @PathParam("id")Long id) {
+	public Response addMultiplesBoletas(VOBoleta boleta, @PathParam("id")Long id) {
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
-		Boleta bole = boleta;
-		ArrayList<Boleta> vendidas = new ArrayList<>();
+		VOBoleta bole = boleta;
+		ArrayList<VOBoleta> vendidas = new ArrayList<>();
 		try {
 			tm.verificarLocalidadSillas(bole.getIdSilla(), bole.getCantidad());
 			//while(bole.getCantidad()>0);
@@ -239,9 +239,9 @@ public class FestivAndesClienteServices {
 	@Path("/abonar")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response crearAbonamiento(@PathParam("id")Long idUsuario, Abonamiento abonamiento)
+	public Response crearAbonamiento(@PathParam("id")Long idUsuario, VOAbonamiento abonamiento)
 	{
-		ArrayList<Boleta> listBoletas = null;
+		ArrayList<VOBoleta> listBoletas = null;
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
 		try{
 		listBoletas = tm.crearAbonamiento(idUsuario, abonamiento);
@@ -258,7 +258,7 @@ public class FestivAndesClienteServices {
 	@Path("/abonar/{idAbonamiento}/devolucion")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response devolerAbonamiento(@PathParam("id")Long idUsuario, @PathParam("idAbonamiento") Long idAbonamiento, Abonamiento abonamiento)
+	public Response devolerAbonamiento(@PathParam("id")Long idUsuario, @PathParam("idAbonamiento") Long idAbonamiento, VOAbonamiento abonamiento)
 	{
 		ArrayList<NotaDebito> notasDebito = null;
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
@@ -270,6 +270,24 @@ public class FestivAndesClienteServices {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 		return Response.status(200).type("text/plain").entity(notasDebito.toString()).build();
+	}
+	
+	@POST
+	@Path("/abonarGlobal")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response crearAbonamientoGlobal(@PathParam("id")Long idUsuario, VOAbonamiento abonamiento)
+	{
+		ArrayList<VOBoleta> listBoletas = null;
+		FestivAndesMaster tm = new FestivAndesMaster(getPath());
+		try{
+		listBoletas = tm.crearAbonamientoGlobal(idUsuario, abonamiento);
+		}
+		catch(Exception e)
+		{
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).type("text/plain").entity(listBoletas.toString()).build();
 	}
 
 

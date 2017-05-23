@@ -2,6 +2,7 @@ package dtm;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import javax.jms.JMSException;
 import javax.jms.Queue;
@@ -22,7 +23,11 @@ import org.codehaus.jackson.map.JsonMappingException;
 import com.rabbitmq.jms.admin.RMQConnectionFactory;
 import com.rabbitmq.jms.admin.RMQDestination;
 
+import jms.AllAbonamientosMDB;
+import jms.NonReplyException;
 import tm.FestivAndesMaster;
+import vos.VOAbonamiento;
+import vos.VOBoleta;
 
 
 public class FestivAndesDistributed 
@@ -38,7 +43,7 @@ public class FestivAndesDistributed
 	
 	private TopicConnectionFactory factory;
 	
-	//private AllVideosMDB allVideosMQ;
+	private AllAbonamientosMDB allAbonamientosMQ;
 	
 	private static String path;
 
@@ -47,15 +52,14 @@ public class FestivAndesDistributed
 	{
 		InitialContext ctx = new InitialContext();
 		factory = (RMQConnectionFactory) ctx.lookup(MQ_CONNECTION_NAME);
-//		allVideosMQ = new AllVideosMDB(factory, ctx);
-//		
-//		allVideosMQ.start();
+		allAbonamientosMQ = new AllAbonamientosMDB(factory, ctx);
+		allAbonamientosMQ.start();
 		
 	}
 	
 	public void stop() throws JMSException
 	{
-		//allVideosMQ.close();
+		allAbonamientosMQ.close();
 	}
 	
 	/**
@@ -107,11 +111,24 @@ public class FestivAndesDistributed
 		FestivAndesMaster tm = new FestivAndesMaster(path);
 		return getInstance(tm);
 	}
+
+	public ArrayList<VOBoleta> getAbonamientosGlobal(VOAbonamiento abonamiento) {
+		// TODO Auto-generated method stub
+		ArrayList<VOBoleta> res = new ArrayList<>();
+		try {
+			res = allAbonamientosMQ.getRemoteAbonamiento(abonamiento);
+		} catch (NoSuchAlgorithmException | JMSException | IOException | NonReplyException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
 	
-//	public ListaVideos getLocalVideos() throws Exception
-//	{
-//		return tm.darVideosLocal();
-//	}
+	public  ArrayList<VOBoleta> getLocalAbonamientos(Long idUsuario, VOAbonamiento abonamiento) throws Exception
+	{
+		return tm.crearAbonamientoGlobal(idUsuario, abonamiento);
+	}
 //	
 //	public ListaVideos getRemoteVideos() throws JsonGenerationException, JsonMappingException, JMSException, IOException, NonReplyException, InterruptedException, NoSuchAlgorithmException
 //	{

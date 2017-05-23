@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import vos.Boleta;
+import vos.VOBoleta;
 import vos.Funcion;
 import vos.Localidad;
 import vos.Silla;
@@ -57,7 +57,7 @@ public class DAOTablaBoleta {
 
 
 
-	public Boleta buscarBoleta(Long id) throws SQLException
+	public VOBoleta buscarBoleta(Long id) throws SQLException
 	{
 		DAOTablaFuncion daoFuncion = new DAOTablaFuncion();
 		DAOTablaSilla daoSilla = new DAOTablaSilla();
@@ -70,7 +70,7 @@ public class DAOTablaBoleta {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
-		Boleta boleta = null;
+		VOBoleta boleta = null;
 		if(rs.next())
 		{
 			Long idFuncion = Long.parseLong(rs.getString("ID_FUNCION"));
@@ -79,7 +79,7 @@ public class DAOTablaBoleta {
 			Long idCliente = Long.parseLong(rs.getString("ID_CLIENTE"));
 			Long idAbonamiento = Long.parseLong(rs.getString("ID_ABONAMIENTO"));
 
-			boleta = new Boleta(id, idFuncion, idSilla, 0, estado);
+			boleta = new VOBoleta(id, idFuncion, idSilla, 0, estado);
 			boleta.setFuncion(daoFuncion.buscarFuncion(idFuncion));
 			boleta.setSilla(daoSilla.buscarSilla(idSilla));
 			boleta.setLocalidad(daoLocalidad.buscarLocalidad(boleta.getSilla().getIdLocalidad()));
@@ -95,7 +95,7 @@ public class DAOTablaBoleta {
 		return boleta;
 	}
 	
-	public Boleta venderBoleta(Long idFuncion, Long idSilla, Long idCliente, Long idAbonamiento) throws SQLException
+	public VOBoleta venderBoleta(Long idFuncion, Long idSilla, Long idCliente, Long idAbonamiento) throws SQLException
 	{
 		DAOTablaFuncion daoFuncion = new DAOTablaFuncion();
 		DAOTablaSilla daoSilla = new DAOTablaSilla();
@@ -128,7 +128,7 @@ public class DAOTablaBoleta {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
-		Boleta returnBoleta = null;
+		VOBoleta returnBoleta = null;
 		while(rs.next())
 		{
 			//Verificar que una boleta no se haya vendido
@@ -143,7 +143,7 @@ public class DAOTablaBoleta {
 			else{
 
 
-				String sql2="INSERT INTO ISIS2304A241720.BOLETA VALUES( sequence_boleta.NEXTVAL,"+ idFuncion
+				String sql2="INSERT INTO ISIS2304A241720.BOLETA VALUES( sequence_boleta.NEXTVAL + 12452352,"+ idFuncion
 						+ "," + idSilla+ "," + idCliente + "," + idAbonamiento + ","  + "'A'" + ")";
 				String key[] = {"ID_BOLETA"};
 				PreparedStatement prepStmt2 = conn.prepareStatement(sql2,key);
@@ -156,7 +156,7 @@ public class DAOTablaBoleta {
 					id = rsInsert.getLong(1);
 					System.out.println(id);
 				}
-				Boleta boletaVendida = new Boleta(id,funcion.getId(), silla.getId(),0,'A');
+				VOBoleta boletaVendida = new VOBoleta(id,funcion.getId(), silla.getId(),0,'A');
 				boletaVendida.setIdCliente(idCliente);
 				boletaVendida.setId(id);
 				boletaVendida.setFuncion(funcion);

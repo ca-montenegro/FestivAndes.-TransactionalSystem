@@ -3,6 +3,7 @@ package rest;
 
 import java.util.ArrayList;
 
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -19,8 +20,9 @@ import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import jms.TwoPhaseCommit;
 import tm.FestivAndesMaster;
-import vos.Abonamiento;
+import vos.VOAbonamiento;
 import vos.BoletasCompradas;
 import vos.Compania;
 import vos.Espectaculo;
@@ -394,7 +396,7 @@ public class FestivAndesAdminServices {
 	@Path("/cancelarFuncion/{idFuncion}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response devolerAbonamiento(@PathParam("idFuncion") Long idFuncion, Abonamiento abonamiento)
+	public Response devolerAbonamiento(@PathParam("idFuncion") Long idFuncion, VOAbonamiento abonamiento)
 	{
 		ArrayList<NotaDebito> notasDebito = null;
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
@@ -431,7 +433,7 @@ public class FestivAndesAdminServices {
 	@PUT
 	@Path("/consultaBoletas/fecha")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response consultaBoletasFecha(Abonamiento fechas) {
+	public Response consultaBoletasFecha(VOAbonamiento fechas) {
 		FestivAndesMaster tm = new FestivAndesMaster(getPath());
 		ArrayList<BoletasCompradas> boletas = null;
 		try {
@@ -486,6 +488,26 @@ public class FestivAndesAdminServices {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 		return Response.status(200).type("text/plain").entity(boletas.toString()).build();
+	}
+	
+	@GET
+	@Path("/twoPrueba/{idCompania}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response twoPrueba(@PathParam("idCompania")Long idCompania)
+	{
+		TwoPhaseCommit two;
+		try {
+			two = new TwoPhaseCommit();
+			two.RetirarCompania(idCompania);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		
+		
+		return Response.status(200).build();
+				
 	}
 }
 

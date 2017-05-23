@@ -9,7 +9,7 @@ public class Cliente extends Usuario{
 	/**
 	 * Boletas del cliente
 	 */
-	private ArrayList<Boleta> boletas;
+	private ArrayList<VOBoleta> boletas;
 	
 	/**
 	 * Preferencias del cliente
@@ -27,7 +27,7 @@ public class Cliente extends Usuario{
 			@JsonProperty(value="correo") String correo)
 	{
 		super(id, nombre, correo, (long) 2);
-		boletas = new ArrayList<Boleta>();
+		boletas = new ArrayList<VOBoleta>();
 		preferencias = new ArrayList<Preferencia>();
 	}
 	
@@ -35,7 +35,7 @@ public class Cliente extends Usuario{
 	 * Metodo getter del atributo boletas
 	 * @return Boletas del cliente
 	 */
-	public ArrayList<Boleta> getBoletas() {
+	public ArrayList<VOBoleta> getBoletas() {
 		return boletas;
 	}
 
@@ -44,7 +44,7 @@ public class Cliente extends Usuario{
 	 *  <b>post: </b> Las boletas del cliente han sido cambiados con el arreglo que entra como parametro
 	 * @param boletas- Boletas del cliente.
 	 */
-	public void setBoletas(ArrayList<Boleta> boletas) {
+	public void setBoletas(ArrayList<VOBoleta> boletas) {
 		this.boletas = boletas;
 	}
 	
