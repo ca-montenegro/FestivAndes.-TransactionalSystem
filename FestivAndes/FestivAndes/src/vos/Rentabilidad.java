@@ -151,6 +151,18 @@ public class Rentabilidad {
 		this.fecha = fecha;
 	}
 	
+	public String toString()
+	{
+		return  "Fecha inicial: " + fechaInicial +"\n"
+				+ "Fecha final: " + fechaFinal + "\n"
+						+ "idEspectaculo: "+ idEspectaculo+"\n"
+								+ "total clientes: " + totalClientes + "\n"
+										+ "total boletas: " + totalBoletas + "\n"
+												+ "proporción: " + proporcion + "\n"
+														+ "precio: " + precio +"\n"
+																+ "fecha: " + fecha+" .";
+	}
+	
 	
 }
 
